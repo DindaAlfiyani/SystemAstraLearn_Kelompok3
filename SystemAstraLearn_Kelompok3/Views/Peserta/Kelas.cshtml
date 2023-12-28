@@ -1,0 +1,115 @@
+﻿@{
+    ViewData["Title"] = "Peserta - Pelatihan";
+    Layout = "_Layout";
+}
+
+<div class="pagetitle">
+    <h1>Pelatihan</h1>
+</div>
+
+<section class="section">
+    <div class="container-fluid">
+        <div class="table-responsive">
+            <table class="table table-striped" style="width:100%" id="dataTable">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Nama Pelatihan</th>
+                        <th scope="col">Deskripsi Pelatihan</th>
+                        <th scope="col">Klasifikasi Pelatihan</th>
+                        <th scope="col">Jumlah Peserta</th>
+                        <th scope="col">Nilai Minimum</th>
+                        <th scope="col">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<style>
+    .section {
+        min-height: 78vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container-fluid {
+        flex: 1;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var rootHost = "http://localhost:7043";
+        var rootWebHost = "https://localhost:7275/SebelumMengikutiPelatihan/";
+        var pelatihanId;
+        var IdLogin = $("#idLogin").val();
+
+        new DataTable('#dataTable', {
+            ajax: {
+                url: rootHost + '/Pelatihan/GetAllPelatihan',
+                type: "GET",
+                dataSrc: function (data) {
+                    return data.data;
+                }
+            },
+            columns: [
+                { data: null },
+                { data: 'nama_pelatihan' },
+                { data: 'deskripsi_pelatihan' },
+                { data: 'nama_klasifikasi' },
+                { data: 'jumlah_peserta' },
+                { data: 'nilai' },
+                { data: null },
+            ],
+            columnDefs: [
+                {
+                    targets: 0,
+                    render: function (data, type, row, index) {
+                        return index.row + 1;
+                    }
+                },
+                {
+                    targets: 6,
+                    render: function (data, type, row, index) {
+                        const editButton = '<button class="btn btn-primary btn-ikuti" style="background-color: #066CBB">Ikuti Pelatihan</i></button>';
+                        return editButton;
+                    }
+                },
+            ],
+            createdRow: function (row, data, dataIndex) {
+                $(row).attr('data-id', data.id_pelatihan);
+                $(row).attr('data-type', 'pelatihan');
+            }
+        });
+
+        $('#dataTable').on('click', 'button.btn-ikuti', function () {
+            pelatihanId = $(this).closest('tr').data("id");
+            var namaPelatihan = $(this).closest('tr').find('td:eq(1)').text();
+            var data = {
+                id_mengikuti: 0,
+                id_pengguna: IdLogin,
+                id_pelatihan: pelatihanId,
+                riwayat_section: 0,
+                riwayat_nilai: 0,
+                rating: 0
+            }
+
+            $.ajax({
+                url: rootHost + "/MengikutiPelatihan/InsertMengikutiPelatihan",
+                type: "post",
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: "application/json",
+                success: function (result) {
+                    var newHref = rootWebHost + pelatihanId + '/0/' + namaPelatihan;
+                    window.location.href = newHref;
+                },
+                error: function () {
+                    console.error("Error fetching data.");
+                }
+            });
+        });
+    });
+</script>

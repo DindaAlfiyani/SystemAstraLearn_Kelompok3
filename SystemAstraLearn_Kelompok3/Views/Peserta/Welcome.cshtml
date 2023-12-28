@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Pelatih - Pelatihan";
+    Layout = "_LayoutSection";
+}
+
+<div class="pagetitle">
+    <h1>Selamat Datang Pada Pelatihan</h1>
+    <h4>@(ViewBag.namaPelatihan)</h4>
+    <input type="hidden" id="idPelatihan" value="@ViewBag.idPelatihan" />
+    <input type="hidden" id="idSection" value="@ViewBag.idSection" />
+    <input type="hidden" id="namaPelatihan" value="@ViewBag.namaPelatihan" />
+</div>
+<style>
+    .section {
+        min-height: 178vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container-fluid {
+        flex: 1;
+    }
+
+    .pagetitle {
+        text-align: center;
+        margin-top: 50px; /* Adjust the margin-top value as needed */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+        .pagetitle h1,
+        .pagetitle h4 {
+            margin: 10px 0; /* Adjust the margin as needed */
+        }
+
+    #idPelatihan {
+        margin-top: 10px; /* Adjust the margin-top value for the input as needed */
+    }
+
+    #main {
+        padding-bottom: 627px; /* Adjust as needed */
+    }
+</style>

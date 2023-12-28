@@ -1,0 +1,188 @@
+﻿@{
+    ViewData["Title"] = "Dashboard Peserta";
+    Layout = "_Layout";
+}
+
+
+<div class="pagetitle">
+    <h1 style="font-size: 48px; font-weight: bold; margin-top: 5px;">Dashboard</h1>
+</div><!-- End Page Title -->
+
+<body1>
+    <section class="section dashboard">
+        <div class="row">
+            <div class="container">
+                <div class="row">
+                    <!-- Sales Card -->
+                    <div class="col-xxl-4">
+                        <div class="card info-card sales-card" style="border-radius: 15px; height: 210px;">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon1 d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-file-earmark-text-fill" style="color: #006CBB; font-size: 4em; "></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h1 id="pelatihan" style="color: #006CBB; font-size: 50px; font-family: Poppins, sans-serif;">145</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header1 card-title1">Jumlah Pelatihan</div>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-4">
+                        <div class="card info-card sales-card" style="border-radius: 15px; height: 210px;">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon1 d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-file-earmark-bar-graph-fill" style="color: #006CBB; font-size: 4em;"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h1 id="pelatihan" style="color: #006CBB; font-size: 50px;">93</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header1 card-title1">Pelatihan Berjalan</div>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-4">
+                        <div class="card info-card sales-card" style="border-radius: 15px; height: 210px;">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon1 d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-file-earmark-check-fill" style="color: #006CBB; font-size: 4em;"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h1 id="pelatihan" style="color: #006CBB; font-size: 50px;">30</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header1 card-title1">Pelatihan Diselesaikan</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+    </section>
+
+
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var swiper1 = new Swiper("#swiper1", {
+                slidesPerView: 3,
+                spaceBetween: 10,
+                grabCursor: true,
+                slidesPerGroup: 1,
+                loop: false,
+                loopFillGroupWithBlank: true,
+                pagination: {
+                    el: ".swiper-pagination1",
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: ".swiper-button-next1",
+                    prevEl: ".swiper-button-prev1",
+                },
+                controller: {
+                    control: "#swiper1",
+                },
+            });
+
+            var swiper2 = new Swiper("#swiper2", {
+                slidesPerView: 3,
+                spaceBetween: 10,
+                grabCursor: true,
+                slidesPerGroup: 1,
+                loop: false,
+                loopFillGroupWithBlank: true,
+                pagination: {
+                    el: ".swiper-pagination2",
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: ".swiper-button-next2",
+                    prevEl: ".swiper-button-prev2",
+                },
+                controller: {
+                    control: "#swiper2",
+                },
+            });
+
+            // Kontrol tambahan agar swiper tidak tergeser bersamaan saat tombol diklik
+            swiper1.on('slideChange', function () {
+                swiper2.slideTo(swiper1.activeIndex);
+            });
+
+            swiper2.on('slideChange', function () {
+                swiper1.slideTo(swiper2.activeIndex);
+            });
+        });
+    </script>
+
+
+
+    <style>
+        .swiper-container {
+            position: relative;
+        }
+
+        .swiper-button-next1,
+        .swiper-button-prev1 {
+            position: absolute;
+            top: 65%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            z-index: 1;
+        }
+
+        .swiper-button-prev1 {
+            left: 50px;
+        }
+
+        .swiper-button-next1 {
+            right: 50px;
+        }
+
+        .swiper-container {
+            position: relative;
+        }
+
+        .swiper-button-next2,
+        .swiper-button-prev2 {
+            position: absolute;
+            top: 70%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            z-index: 1;
+        }
+
+        .swiper-button-prev2 {
+            left: 50px;
+        }
+
+        .swiper-button-next2 {
+            right: 50px;
+        }
+    </style>
+
+</body1>

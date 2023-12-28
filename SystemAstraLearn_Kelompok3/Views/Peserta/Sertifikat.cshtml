@@ -1,0 +1,129 @@
+﻿@{
+    ViewData["Title"] = "Admin - Pelatihan";
+    Layout = "_Layout";
+}
+
+<div class="pagetitle">
+    <h1>Pelatihan</h1>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="container-fluid">
+        <!-- Table with stripped rows -->
+        <div class="table-responsive">
+            <table class="table table-striped" style="width:100%" id="dataTable">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Nama Pelatihan</th>
+                        <th scope="col">Nilai</th>
+                        <th scope="col">Tanggal Selesai</th>
+                        <th scope="col">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<style>
+    .section {
+        min-height: 78vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container-fluid {
+        flex: 1;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var rootHost = "http://localhost:7043";
+        var IdLogin = $("#idLogin").val();
+
+        // Make an AJAX request to get Pelatihan data
+        $.ajax({
+            url: rootHost + '/Pelatihan/GetAllPelatihan',
+            type: 'GET',
+            success: function (pelatihanData) {
+                // Log Pelatihan data to console
+                console.log('Pelatihan Data:', pelatihanData);
+
+                // Make an AJAX request to get Sertifikat data
+                $.ajax({
+                    url: rootHost + '/Sertifikat/GetAllSertifikat2?id=' + IdLogin,
+                    type: "GET",
+                    success: function (sertifikatData) {
+                        // Log Sertifikat data to console
+                        console.log('Sertifikat Data:', sertifikatData);
+
+                        // Merge Sertifikat and Pelatihan data based on id_pelatihan
+                        var mergedData = sertifikatData.data.map(function (sertifikatItem) {
+                            var matchingPelatihan = pelatihanData.data.find(function (pelatihanItem) {
+                                return sertifikatItem.id_pelatihan === pelatihanItem.id_pelatihan;
+                            });
+
+                            return {
+                                id_pelatihan: sertifikatItem.id_pelatihan,
+                                nama_pelatihan: matchingPelatihan ? matchingPelatihan.nama_pelatihan : '',
+                                nilai_exam: sertifikatItem.nilai_exam,
+                                tanggal_selesai: sertifikatItem.tanggal_selesai
+                            };
+                        });
+
+                        // Log Merged Data to console
+                        console.log('Merged Data:', mergedData);
+
+                        // Initialize DataTable with merged data
+                        new DataTable('#dataTable', {
+                            data: mergedData,
+                            columns: [
+                                { data: null },
+                                { data: 'nama_pelatihan' },
+                                { data: 'nilai_exam' },
+                                { data: 'tanggal_selesai' },
+                                {
+                                    data: null,
+                                    render: function (data, type, row, index) {
+                                        const lihatSertifikatButton = '<button onclick="lihatSertifikat(\'' + row.nama_pelatihan + '\', \'' + row.tanggal_selesai + '\')" class="btn btn-primary btn-sm">Lihat Sertifikat</button>';
+                                        
+                                        return lihatSertifikatButton;
+                                    }
+                                }
+                            ],
+                            columnDefs: [
+                                {
+                                    targets: 0,
+                                    render: function (data, type, row, index) {
+                                        return index.row + 1;
+                                    }
+                                }
+                            ],
+                            createdRow: function (row, data, dataIndex) {
+                                $(row).attr('data-id', data.id_pelatihan);
+                                $(row).attr('data-type', 'klasifikasi');
+                            }
+                        });
+                    },
+                    error: function (error) {
+                        console.error('Error fetching Sertifikat data:', error);
+                    }
+                });
+            },
+            error: function (error) {
+                console.error('Error fetching Pelatihan data:', error);
+            }
+        });
+    });
+
+    function lihatSertifikat(namaPelatihan, tanggalSelesai) {
+        var NamaPengguna = $("#namaPengguna").val();
+        var rootWebHost3 = "https://localhost:7275/Sertifikat/" + NamaPengguna + "/" + namaPelatihan + "/" + tanggalSelesai;
+
+        window.open(rootWebHost3, '_blank');
+    }
+</script>

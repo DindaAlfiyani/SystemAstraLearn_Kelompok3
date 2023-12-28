@@ -1,0 +1,726 @@
+﻿@{
+    ViewData["Title"] = "Pelatih - Pelatihan";
+    Layout = "_Layout";
+}
+
+<div class="pagetitle">
+    <h1>Exam</h1>
+    <h4>@(ViewBag.namaPelatihan)</h4>
+    <input type="hidden" id="idPelatihan" value="@ViewBag.idPelatihan" />
+    <h4 id="nilaiMinimum2">Nilai Minimum : @(ViewBag.nilaiMinimum)</h4>
+</div>
+
+<section class="section">
+    <div class="container-fluid">
+        <button class="btn btn-sm btn-primary mb-3" data-toggle="modal" data-target="#tambah_exercise" style="background-color: #066CBB; color:seashell; border-radius: 7px; font-size: 20px;">
+            <i class="fas fa-plus fa-sm"></i> Tambah Exam
+        </button>
+        <button class="btn btn-sm btn-warning mb-3" data-toggle="modal" data-target="#ubah_nilai_minimum" style="background-color: #066CBB; color:seashell; border-radius: 7px; font-size: 20px;">
+            <i class="fas fa-edit fa-sm"></i> Ubah Nilai Minimum
+        </button>
+        <div class="table-responsive">
+            <table class="table table-striped" style="width:100%" id="dataTable">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Soal</th>
+                        <th scope="col">Jawaban</th>
+                        <th scope="col">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="tambah_exercise" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="color: #464646; font-family: 'Poppins', sans-serif; font-weight: bold; font-size: 30px;">Form Tambah Exam</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="myForm">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label class="control-label" for="Soal" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Soal *</label>
+                            <textarea id="Soal" name="Soal" class="form-control"></textarea>
+                            <span class="text-danger" id="errorSoal"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="Pilgan1" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Pilihan 1 *</label>
+                            <input id="Pilgan1" name="Pilgan1" class="form-control" />
+                            <span class="text-danger" id="errorPilgan1"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="Pilgan2" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Pilihan 2 *</label>
+                            <input id="Pilgan2" name="Pilgan2" class="form-control" />
+                            <span class="text-danger" id="errorPilgan2"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="Pilgan3" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Pilihan 3 *</label>
+                            <input id="Pilgan3" name="Pilgan3" class="form-control" />
+                            <span class="text-danger" id="errorPilgan3"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="Pilgan4" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Pilihan 4 *</label>
+                            <input id="Pilgan4" name="Pilgan4" class="form-control" />
+                            <span class="text-danger" id="errorPilgan4"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="Pilgan5" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Pilihan 5 *</label>
+                            <input id="Pilgan5" name="Pilgan5" class="form-control" />
+                            <span class="text-danger" id="errorPilgan5"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="KunciJawaban" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Kunci Jawaban *</label>
+                            <select id="KunciJawaban" name="KunciJawaban" class="form-control">
+                                <option value="pilgan1">Pilihan 1</option>
+                                <option value="pilgan2">Pilihan 2</option>
+                                <option value="pilgan3">Pilihan 3</option>
+                                <option value="pilgan4">Pilihan 4</option>
+                                <option value="pilgan5">Pilihan 5</option>
+                            </select>
+                            <span class="text-danger" id="errorKunciJawaban"></span>
+                        </div>
+                        <br>
+                        <div class="form-group text-right">
+                            <input type="submit" value="Tambah" id="buttonCreate" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Exercise Modal -->
+    <div class="modal fade" id="edit_exercise" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="color: #464646; font-family: 'Poppins', sans-serif; font-weight: bold; font-size: 30px;">Form Edit Exam</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label class="control-label" for="EditSoal" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Soal *</label>
+                            <textarea id="EditSoal" name="EditSoal" class="form-control"></textarea>
+                            <span class="text-danger" id="errorEditSoal"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="EditPilgan1" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Pilihan 1 *</label>
+                            <input id="EditPilgan1" name="EditPilgan1" class="form-control" />
+                            <span class="text-danger" id="errorEditPilgan1"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="EditPilgan2" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Pilihan 2 *</label>
+                            <input id="EditPilgan2" name="EditPilgan2" class="form-control" />
+                            <span class="text-danger" id="errorEditPilgan2"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="EditPilgan3" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Pilihan 3 *</label>
+                            <input id="EditPilgan3" name="EditPilgan3" class="form-control" />
+                            <span class="text-danger" id="errorEditPilgan3"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="EditPilgan4" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Pilihan 4 *</label>
+                            <input id="EditPilgan4" name="EditPilgan4" class="form-control" />
+                            <span class="text-danger" id="errorEditPilgan4"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="EditPilgan5" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Pilihan 5 *</label>
+                            <input id="EditPilgan5" name="EditPilgan5" class="form-control" />
+                            <span class="text-danger" id="errorEditPilgan5"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="EditKunciJawaban" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Kunci Jawaban *</label>
+                            <select id="EditKunciJawaban" name="EditKunciJawaban" class="form-control">
+                            </select>
+                            <span class="text-danger" id="errorEditKunciJawaban"></span>
+                        </div>
+                        <br>
+                        <div class="form-group text-right">
+                            <input type="submit" value="Ubah" id="buttonUpdate" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="info_exercise" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="color: #464646; font-family: 'Poppins', sans-serif; font-weight: bold; font-size: 30px;">Form Detail Exam</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label class="control-label" for="InfoSoal" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Soal *</label>
+                        <textarea id="InfoSoal" name="InfoSoal" class="form-control" readonly></textarea>
+                        <span class="text-danger" id="errorInfoSoal"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="InfoPilgan1" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Pilihan 1 *</label>
+                        <input id="InfoPilgan1" name="InfoPilgan1" class="form-control" readonly />
+                        <span class="text-danger" id="errorInfoPilgan1"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="InfoPilgan2" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Pilihan 2 *</label>
+                        <input id="InfoPilgan2" name="InfoPilgan2" class="form-control" readonly />
+                        <span class="text-danger" id="errorInfoPilgan2"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="InfoPilgan3" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Pilihan 3 *</label>
+                        <input id="InfoPilgan3" name="InfoPilgan3" class="form-control" readonly />
+                        <span class="text-danger" id="errorInfoPilgan3"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="InfoPilgan4" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Pilihan 4 *</label>
+                        <input id="InfoPilgan4" name="InfoPilgan4" class="form-control" readonly />
+                        <span class="text-danger" id="errorInfoPilgan4"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="InfoPilgan5" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Pilihan 5 *</label>
+                        <input id="InfoPilgan5" name="InfoPilgan5" class="form-control" readonly />
+                        <span class="text-danger" id="errorInfoPilgan5"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="InfoKunciJawaban" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Kunci Jawaban *</label>
+                        <select id="InfoKunciJawaban" name="InfoKunciJawaban" class="form-control" readonly>
+                        </select>
+                        <span class="text-danger" id="errorInfoKunciJawaban"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ubah_nilai_minimum" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ubah Nilai Minimum</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="ubahNilaiForm">
+                        <div class="form-group">
+                            <label for="nilaiMinimum">Nilai Minimum</label>
+                            <input type="number" id="nilaiMinimum" name="nilaiMinimum" class="form-control" />
+                            <span class="text-danger" id="errorNilaiMinimum"></span>
+                        </div>
+                        <div class="form-group text-right">
+                            <input type="button" value="Ubah" id="buttonUbahNilai" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<style>
+    .section {
+        min-height: 78vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container-fluid {
+        flex: 1;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var rootHost = "http://localhost:7043";
+        var exerciseId;
+        var IdPelatihan = $("#idPelatihan").val();
+
+        new DataTable('#dataTable', {
+            ajax: {
+                url: rootHost + '/Exam/GetAllExams?id=' + IdPelatihan,
+                type: "GET",
+                dataSrc: function (data) {
+                    return data.data;
+                }
+            },
+            columns: [
+                { data: null },
+                { data: 'soal' },
+                { data: 'kunci_jawaban' },
+                { data: null },
+            ],
+            columnDefs: [
+                {
+                    targets: 0,
+                    render: function (data, type, row, index) {
+                        return index.row + 1;
+                    }
+                },
+                {
+                    targets: 3,
+                    render: function (data, type, row, index) {
+                        const deleteButton = '<button class="btn btn-sm btn-danger delete-button" style="background-color:#BB0000; border-radius: 5px;"><i class="bi bi-trash"></i></button>';
+                        const editButton = '<button class="btn btn-primary btn-sm edit-button" data-toggle="modal" data-target="#edit_exercise" data-id="' + row.id_pelatihan + '" style="background-color: #066CBB border-radius: 5px;"><i class="bi bi-exclamation-triangle"></i></button>';
+                        const editButton2 = '<button class="btn btn-primary btn-sm edit-button2" data-toggle="modal" data-target="#detail_exercise" data-id="' + row.id_pelatihan + '"><i class="bi bi-info-circle"></i></button>';
+                        return editButton + " " + deleteButton + " " + editButton2;
+                    }
+                }
+            ],
+            createdRow: function (row, data, dataIndex) {
+                $(row).attr('data-id', data.id_exam);
+                $(row).attr('data-type', 'pelatihan');
+            }
+        });
+
+        function loadNilai() {
+            $.ajax({
+                url: rootHost + '/Pelatihan/GetPelatihan?id=' + IdPelatihan,
+                type: 'GET',
+                success: function (response) {
+                    if (response.status === 200 && response.data) {
+                        var nilaiMinimumValue = response.data.nilai;
+                        console.log(nilaiMinimumValue);
+
+                        // Set the inner text of an element with ID "nilaiMinimum2"
+                        $('#nilaiMinimum2').text("nilai minimum = " + nilaiMinimumValue);
+                    } else {
+                        console.error('Invalid API response format:', response);
+                    }
+                },
+                error: function (error) {
+                    console.error('Error fetching nilaiMinimum:', error);
+                }
+            });
+        }
+
+
+        loadNilai();
+
+        function tambahExercise() {
+            var soal = $("#Soal").val();
+            var pilgan1 = $("#Pilgan1").val();
+            var pilgan2 = $("#Pilgan2").val();
+            var pilgan3 = $("#Pilgan3").val();
+            var pilgan4 = $("#Pilgan4").val();
+            var pilgan5 = $("#Pilgan5").val();
+            var kunciJawaban;
+
+            if ($("#KunciJawaban").val() === "pilgan1") {
+                kunciJawaban = pilgan1;
+            } else if ($("#KunciJawaban").val() === "pilgan2") {
+                kunciJawaban = pilgan2;
+            } else if ($("#KunciJawaban").val() === "pilgan3") {
+                kunciJawaban = pilgan3;
+            } else if ($("#KunciJawaban").val() === "pilgan4") {
+                kunciJawaban = pilgan4;
+            } else if ($("#KunciJawaban").val() === "pilgan5") {
+                kunciJawaban = pilgan5;
+            } else {
+                $("#errorKunciJawaban").text("Pilih kunci jawaban.");
+                return;
+            }
+
+            if (!soal.trim()) {
+                $("#errorSoal").text("Soal tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorSoal").text("");
+            }
+
+            if (!pilgan1.trim()) {
+                $("#errorPilgan1").text("Pilihan 1 tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorPilgan1").text("");
+            }
+
+            if (!pilgan2.trim()) {
+                $("#errorPilgan2").text("Pilihan 2 tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorPilgan2").text("");
+            }
+
+            if (!pilgan3.trim()) {
+                $("#errorPilgan3").text("Pilihan 3 tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorPilgan3").text("");
+            }
+
+            if (!pilgan4.trim()) {
+                $("#errorPilgan4").text("Pilihan 4 tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorPilgan4").text("");
+            }
+
+            if (!pilgan5.trim()) {
+                $("#errorPilgan5").text("Pilihan 5 tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorPilgan5").text("");
+            }
+
+            if (!kunciJawaban.trim()) {
+                $("#errorKunciJawaban").text("Kunci Jawaban harus dipilih.");
+                return;
+            } else {
+                $("#errorKunciJawaban").text("");
+            }
+
+            var data = {
+                id_exam: 0,
+                id_pelatihan: IdPelatihan,
+                soal: soal,
+                pilgan1: pilgan1,
+                pilgan2: pilgan2,
+                pilgan3: pilgan3,
+                pilgan4: pilgan4,
+                pilgan5: pilgan5,
+                kunci_jawaban: kunciJawaban
+            };
+            console.log(data);
+            $.ajax({
+                url: rootHost + '/Exam/InsertExam',
+                method: "post",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (data) {
+                    notifikasiTambahSukses();
+                },
+                error: function () {
+                }
+            });
+        }
+
+
+        $("#myForm").submit(function (e) {
+            e.preventDefault();
+            tambahExercise();
+        });
+
+
+        $(document).on("click", ".delete-button", function () {
+            exerciseId = $(this).closest('tr').data("id");
+
+            Swal.fire({
+                title: "Hapus Exercise?",
+                text: "Apakah anda ingin menghapus exercise ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya",
+                cancelButtonText: "Tidak"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    hapusExercise();
+                }
+            });
+        });
+
+        function hapusExercise() {
+            $.ajax({
+                url: rootHost + '/Exam/DeleteExam?id=' + exerciseId,
+                type: "POST",
+                success: function (data) {
+                    notifikasiHapusSukses();
+                },
+                error: function () {
+                    Swal.fire("Error!", "Terjadi kesalahan.", "error");
+                }
+            });
+        }
+
+        $('#dataTable').on('click', 'button.edit-button', function () {
+            exerciseId = $(this).closest('tr').data("id");
+
+            $.ajax({
+                url: rootHost + '/Exam/GetExam?id=' + exerciseId,
+                type: 'GET',
+                success: function (response) {
+                    if (response && response.data) {
+                        var data = response.data;
+
+                        // Set the values in the edit modal based on the retrieved data
+                        $('#EditSoal').val(data.soal);
+                        $('#EditPilgan1').val(data.pilgan1);
+                        $('#EditPilgan2').val(data.pilgan2);
+                        $('#EditPilgan3').val(data.pilgan3);
+                        $('#EditPilgan4').val(data.pilgan4);
+                        $('#EditPilgan5').val(data.pilgan5);
+
+                        // Populate the dropdown with values from data.pilgan1 to data.pilgan5
+                        var dropdown = $('#EditKunciJawaban');
+                        dropdown.empty();
+                        for (var i = 1; i <= 5; i++) {
+                            var option = $('<option>', {
+                                value: data['pilgan' + i],
+                                text: 'Pilihan ' + i
+                            });
+
+                            // Set the selected attribute for the matching option
+                            if (data['pilgan' + i] === data.kunci_jawaban) {
+                                option.attr('selected', 'selected');
+                            }
+
+                            dropdown.append(option);
+                        }
+
+                        // Show the edit modal
+                        $('#edit_exercise').modal('show');
+                    } else {
+                        console.error("Invalid response format:", response);
+                        Swal.fire('Error!', 'Terjadi kesalahan dalam format respons.', 'error');
+                    }
+                },
+                error: function () {
+                    Swal.fire('Error!', 'Terjadi kesalahan.', 'error');
+                }
+            });
+        });
+
+        $('#dataTable').on('click', 'button.edit-button2', function () {
+            exerciseId = $(this).closest('tr').data("id");
+
+            $.ajax({
+                url: rootHost + '/Exam/GetExam?id=' + exerciseId,
+                type: 'GET',
+                success: function (response) {
+                    if (response && response.data) {
+                        var data = response.data;
+
+                        // Set the values in the edit modal based on the retrieved data
+                        $('#InfoSoal').val(data.soal);
+                        $('#InfoPilgan1').val(data.pilgan1);
+                        $('#InfoPilgan2').val(data.pilgan2);
+                        $('#InfoPilgan3').val(data.pilgan3);
+                        $('#InfoPilgan4').val(data.pilgan4);
+                        $('#InfoPilgan5').val(data.pilgan5);
+
+                        // Populate the dropdown with values from data.pilgan1 to data.pilgan5
+                        var dropdown = $('#InfoKunciJawaban');
+                        dropdown.empty();
+                        for (var i = 1; i <= 5; i++) {
+                            var option = $('<option>', {
+                                value: data['pilgan' + i],
+                                text: 'Pilihan ' + i
+                            });
+
+                            // Set the selected attribute for the matching option
+                            if (data['pilgan' + i] === data.kunci_jawaban) {
+                                option.attr('selected', 'selected');
+                            }
+
+                            dropdown.append(option);
+                        }
+
+                        // Show the edit modal
+                        $('#info_exercise').modal('show');
+                    } else {
+                        console.error("Invalid response format:", response);
+                        Swal.fire('Error!', 'Terjadi kesalahan dalam format respons.', 'error');
+                    }
+                },
+                error: function () {
+                    Swal.fire('Error!', 'Terjadi kesalahan.', 'error');
+                }
+            });
+        });
+
+        function ubahExercise() {
+            var soal = $("#EditSoal").val();
+            var pilgan1 = $("#EditPilgan1").val();
+            var pilgan2 = $("#EditPilgan2").val();
+            var pilgan3 = $("#EditPilgan3").val();
+            var pilgan4 = $("#EditPilgan4").val();
+            var pilgan5 = $("#EditPilgan5").val();
+            var kunciJawaban = $("#EditKunciJawaban").val();
+
+            if (!soal.trim()) {
+                $("#errorEditSoal").text("Soal tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorEditSoal").text("");
+            }
+
+            if (!pilgan1.trim()) {
+                $("#errorEditPilgan1").text("Pilihan 1 tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorEditPilgan1").text("");
+            }
+
+            if (!pilgan2.trim()) {
+                $("#errorEditPilgan2").text("Pilihan 2 tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorEditPilgan2").text("");
+            }
+
+            if (!pilgan3.trim()) {
+                $("#errorEditPilgan3").text("Pilihan 3 tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorEditPilgan3").text("");
+            }
+
+            if (!pilgan4.trim()) {
+                $("#errorEditPilgan4").text("Pilihan 4 tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorEditPilgan4").text("");
+            }
+
+            if (!pilgan5.trim()) {
+                $("#errorEditPilgan5").text("Pilihan 5 tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorEditPilgan5").text("");
+            }
+
+            if (!kunciJawaban.trim()) {
+                $("#errorEditKunciJawaban").text("Kunci Jawaban harus dipilih.");
+                return;
+            } else {
+                $("#errorEditKunciJawaban").text("");
+            }
+
+            var data = {
+                id_exam: exerciseId,
+                id_pelatihan: IdPelatihan,
+                soal: soal,
+                pilgan1: pilgan1,
+                pilgan2: pilgan2,
+                pilgan3: pilgan3,
+                pilgan4: pilgan4,
+                pilgan5: pilgan5,
+                kunci_jawaban: kunciJawaban
+            };
+
+            $.ajax({
+                url: rootHost + '/Exam/UpdateExam',
+                method: "post",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (data) {
+                    notifikasiUpdateSukses();
+                },
+                error: function () {
+
+                }
+            });
+        }
+
+        $("#editForm").submit(function (e) {
+            e.preventDefault();
+            ubahExercise();
+        });
+
+        function notifikasiTambahSukses() {
+            Swal.fire({
+                title: "Sukses!",
+                text: "Data Exam berhasil ditambahkan.",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "OK"
+            }).then(() => {
+                location.reload();
+            });
+        }
+
+        function notifikasiUpdateSukses() {
+            Swal.fire({
+                title: "Sukses!",
+                text: "Data Exam Pelatihan berhasil diubah.",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "OK"
+            }).then(() => {
+                location.reload();
+            });
+        }
+
+        function notifikasiHapusSukses() {
+            Swal.fire({
+                title: "Sukses!",
+                text: "Data Exam Pelatihan berhasil dihapus.",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "OK"
+            }).then(() => {
+                location.reload();
+            });
+        }
+
+        $('#edit_exercise .close').on('click', function () {
+            $('#edit_exercise').modal('hide');
+        });
+
+        $('#info_exercise .close').on('click', function () {
+            $('#info_exercise').modal('hide');
+        });
+
+        function ubahNilaiMinimum() {
+            var nilaiMinimum = $("#nilaiMinimum").val();
+
+            if (!nilaiMinimum.trim()) {
+                $("#errorNilaiMinimum").text("Nilai Minimum tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorNilaiMinimum").text("");
+            }
+
+            var idPelatihan = IdPelatihan;
+            var nilaiMinimum = nilaiMinimum;
+
+            $.ajax({
+                url: rootHost + '/Pelatihan/UpdateNilai?id=' + idPelatihan +'&nilai=' + nilaiMinimum,
+                method: "post",
+                success: function (data) {
+                    console.log(idPelatihan);
+                    console.log(nilaiMinimum);
+                    notifikasiUbahNilaiSukses();
+                },
+                error: function () {
+
+                }
+            });
+        }
+
+        $("#ubahNilaiForm").submit(function (e) {
+            e.preventDefault();
+            ubahNilaiMinimum();
+        });
+
+        $(document).on("click", "#buttonUbahNilai", function () {
+            ubahNilaiMinimum();
+        });
+
+        function notifikasiUbahNilaiSukses() {
+            Swal.fire({
+                title: "Sukses!",
+                text: "Nilai Minimum berhasil diubah.",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "OK"
+            }).then(() => {
+                location.reload();
+            });
+        }
+    });
+</script>

@@ -1,0 +1,303 @@
+﻿@{
+    ViewData["Title"] = "Peserta - Exercise";
+    Layout = "_LayoutSection";
+}
+@if (Context.Session.GetString("User") != null)
+{
+    var IsLoggedIn = Context.Session.GetString("User");
+    var loggedInUserId = Context.Session.GetInt32("Id");
+    <input type="hidden" id="idLogin2" value="@loggedInUserId" />
+    <input type="hidden" id="namaPengguna2" value="@IsLoggedIn" />
+}
+<!-- Add modal HTML structure -->
+<div class="modal fade" id="scoreModal" tabindex="-1" role="dialog" aria-labelledby="scoreModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="scoreModalLabel">Nilai Anda</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="scoreMessage"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="idPelatihan" value="@ViewBag.idPelatihan" />
+<input type="hidden" id="namaPelatihan" value="@ViewBag.namaPelatihan" />
+<input type="hidden" id="idSection" value="@ViewBag.idSection" />
+
+<!-- ======= Breadcrumbs ======= -->
+<section id="breadcrumbs" class="breadcrumbs">
+    <div class="container">
+        <div class="d-flex justify-content-center py-4">
+            <div class="section-title">
+                <span><h1>Exam</h1></span>
+            </div>
+        </div><!-- End Logo -->
+    </div>
+</section><!-- End Breadcrumbs -->
+
+<div class="container mt-sm-5 my-1" id="exercise-container">
+    <br />
+    <br />
+</div>
+<div class="d-flex align-items-center pt-3">
+    <div class="ml-auto mr-sm-5">
+        <button class="btn btn-success" id="submitBtn">Simpan Jawaban</button>
+    </div>
+</div>
+
+<!-- Add this script after your existing script -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var IdPelatihan = $("#idPelatihan").val();
+        console.log(IdPelatihan);
+        var IdSection = $("#idSection").val();
+        var IdLogin = $("#idLogin2").val();
+        console.log(IdLogin);
+        var nilaiMinimum;
+        var NamaPelatihan;
+        var rootHost = "http://localhost:7043";
+        var NamaPengguna = $("#namaPengguna2").val();
+        var currentDate = new Date().toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' });
+
+        var correctAnswers = {};
+
+        var selectedAnswers = {};
+
+        $.ajax({
+            url: rootHost + '/Exam/GetAllExams?id=' + IdPelatihan,
+            method: 'get',
+            contentType: 'application/json',
+            success: function (response) {
+                if (response.status === 200) {
+                    console.log(response);
+                    insertExerciseData(response.data);
+                }
+            }
+        });
+
+        $.ajax({
+            url: rootHost + '/Pelatihan/GetPelatihan?id=' + IdPelatihan,
+            method: 'get',
+            contentType: 'application/json',
+            success: function (response) {
+                if (response.status === 200) {
+                    nilaiMinimum = response.data.nilai;
+                    NamaPelatihan = response.data.nama_pelatihan;
+                }
+            }
+        });
+
+
+        function insertExerciseData(data) {
+            var exerciseContainer = $("#exercise-container");
+
+            data.forEach(function (exercise, index) {
+                // Store the correct answer for each exercise
+                correctAnswers[index] = exercise.kunci_jawaban;
+
+                var exerciseHtml = `
+                                <div class="question ml-sm-5 pl-sm-5 pt-2" style="font-family: 'Poppins', sans-serif;">
+                                <div class="py-2 h5"><b>Soal ${index + 1}: ${exercise.soal}</b></div>
+                                <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
+                                    <label class="options" data-correct="${exercise.kunci_jawaban}">
+                                        ${exercise.pilgan1}
+                                        <input type="radio" name="radio${index}" data-answer="${exercise.pilgan1}">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="options" data-correct="${exercise.kunci_jawaban}">
+                                        ${exercise.pilgan2}
+                                        <input type="radio" name="radio${index}" data-answer="${exercise.pilgan2}">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="options" data-correct="${exercise.kunci_jawaban}">
+                                        ${exercise.pilgan3}
+                                        <input type="radio" name="radio${index}" data-answer="${exercise.pilgan3}">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="options" data-correct="${exercise.kunci_jawaban}">
+                                        ${exercise.pilgan4}
+                                        <input type="radio" name="radio${index}" data-answer="${exercise.pilgan4}">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <label class="options" data-correct="${exercise.kunci_jawaban}">
+                                        ${exercise.pilgan5}
+                                        <input type="radio" name="radio${index}" data-answer="${exercise.pilgan5}">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <br />
+                            <br />
+                        `;
+
+                exerciseContainer.append(exerciseHtml);
+            });
+        }
+
+        // Add click event for the "Next" button
+        $("#submitBtn").on("click", function () {
+            // Show confirmation dialog before checking answers
+            showConfirmationDialog();
+        });
+
+        var submitBtn = $("#submitBtn");
+
+        function showConfirmationDialog() {
+            Swal.fire({
+                title: 'Yakin Mengirim Jawaban?',
+                text: 'Anda tidak bisa mengubah Jawaban anda, setelah kirim jawaban!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, submit!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Store selected answers
+                    storeSelectedAnswers();
+
+                    // Check answers
+                    checkAnswers();
+
+                    // Change the buttons
+                    submitBtn.hide();
+                }
+            });
+        }
+
+        function storeSelectedAnswers() {
+            // Loop through each question
+            $(".question").each(function (index) {
+                var selectedAnswer = $(this).find("input[name='radio" + index + "']:checked").data("answer");
+                selectedAnswers[index] = selectedAnswer;
+            });
+        }
+
+        function checkAnswers() {
+            var totalQuestions = $(".question").length;
+            var correctCount = 0;
+
+            // Loop through each question
+            $(".question").each(function (index) {
+                var selectedAnswer = selectedAnswers[index];
+                var correct = correctAnswers[index];
+                var isCorrect = selectedAnswer === correct;
+
+                // Highlight selected answer and mark with checkmark or cross
+                $(this).find("label.options").each(function () {
+                    var optionText = $(this).text().trim(); // Trim extra spaces
+                    var checkmarkSpan = $("<span class='checkmark'>&#10004;</span>");
+                    var crossSpan = $("<span class='checkmark'>&#10008;</span>");
+
+                    if (optionText === selectedAnswer) {
+                        $(this).css("font-weight", "bold"); // Make text bold
+
+                        if (isCorrect) {
+                            $(this).css("color", "green");
+                            $(this).append(checkmarkSpan); // Checkmark to the right
+                            correctCount++;
+                        } else {
+                            $(this).css("color", "red");
+                            $(this).append(crossSpan); // Cross to the right
+                        }
+                    }
+                });
+            });
+
+            var score = (correctCount / totalQuestions) * 100;
+
+            // Disable radio buttons after submission
+            $(".question input[type='radio']").attr("disabled", true);
+
+            if (score < nilaiMinimum) {
+                $("#scoreMessage").html("Nilai Kamu " + score.toFixed(2) + "% Silahkan Mengerjakan Ulang");
+
+                // Show the modal
+                $("#scoreModal").modal('show');
+                // Close the modal after 5 seconds
+                setTimeout(function () {
+                    $("#scoreModal").modal('hide');
+                }, 5000);
+
+                // Refresh the page after 5 seconds
+                setTimeout(function () {
+                    location.reload();
+                }, 5000);
+            } else {
+                var congratsMessage = "Selamat! Anda telah berhasil menyelesaikan ujian dengan baik.";
+
+                if (score === 100) {
+                    congratsMessage = "Selamat! Anda telah berhasil mendapatkan nilai sempurna.";
+                }
+
+                $("#scoreMessage").html("Nilai Kamu " + score.toFixed(0) + "% " + congratsMessage);
+
+                $("#scoreModal").modal('show');
+                
+                var data = {
+                    id_mengikuti: 0,
+                    id_pengguna: IdLogin,
+                    id_pelatihan: IdPelatihan,
+                    riwayat_section: 0,
+                    riwayat_nilai: 0,
+                    rating: 0
+                };
+
+                $.ajax({
+                    url: rootHost + "/MengikutiPelatihan/UpdateMengikutiPelatihan",
+                    type: "post",
+                    data: JSON.stringify(data),
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function (result) {
+                        loadRiwayat();
+                    },
+                    error: function () {
+                        console.error("Error fetching data.");
+                    }
+                });
+
+                var currentDate2 = new Date().toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
+
+                var data2 = {
+                    id_sertifikat: 0,
+                    id_pelatihan: IdPelatihan,
+                    id_pengguna: IdLogin,
+                    nilai_exam: score.toFixed(0),
+                    tanggal_selesai: currentDate2
+                };
+
+                $.ajax({
+                    url: rootHost + "/Sertifikat/InsertSertifikat",
+                    type: "post",
+                    data: JSON.stringify(data2),
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function (result) {
+                        // Handle success, if needed
+                        console.log("Sertifikat inserted successfully");
+                    },
+                    error: function () {
+                        console.error("Error inserting sertifikat.");
+                    }
+                });
+
+                var rootWebHost3 = "https://localhost:7275/Sertifikat/" + NamaPengguna + "/" + NamaPelatihan + "/" + currentDate;
+
+                window.open(rootWebHost3, '_blank');
+
+                location.reload();
+                
+            }
+        }
+    });
+</script>

@@ -1,0 +1,368 @@
+﻿@{
+    ViewData["Title"] = "Dashboard Pelatih";
+    Layout = "_Layout";
+}
+
+<body1 style="height: 710px;">
+
+    <section class="section dashboard">
+        <div class="row">
+            <div class="container">
+                <div class="row">
+                    <!-- Sales Card -->
+                    <div class="col-xxl-6">
+                        <div class="card info-card sales-card" style="border-radius: 15px; height: 210px;">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon1 d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-file-earmark-text-fill" style="color: #006CBB; font-size: 4em; "></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h1 id="pelatihan" style="color: #006CBB; font-size: 50px; font-family: Poppins, sans-serif;">145</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header1 card-title1">Jumlah Pelatihan</div>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-6">
+                        <div class="card info-card sales-card" style="border-radius: 15px; height: 210px;">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon1 d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-file-earmark-person-fill" style="color: #006CBB; font-size: 4em;"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h1 id="pelatihan" style="color: #006CBB; font-size: 50px;">123</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header1 card-title1">Jumlah Peserta</div>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-6">
+                        <div class="card info-card sales-card" style="border-radius: 15px; height: 210px;">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon1 d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-file-earmark-bar-graph-fill" style="color: #006CBB; font-size: 4em;"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h1 id="pelatihan" style="color: #006CBB; font-size: 50px;">93</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header1 card-title1">Pelatihan Berjalan</div>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-6">
+                        <div class="card info-card sales-card" style="border-radius: 15px; height: 210px;">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon1 d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-file-earmark-check-fill" style="color: #006CBB; font-size: 4em;"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h1 id="pelatihan" style="color: #006CBB; font-size: 50px;">30</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header1 card-title1">Pelatihan Diselesaikan</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+    </section>
+
+   @* <!-- First Section - Teknik Informasi -->
+    <section1>
+        <div class="pagetitle" style="margin-left: 50px;">
+            <p>Daftar Pelatihan</p>
+        </div>
+
+        <div class="swiper mySwiper Swiper1 container" id="swiper1">
+            <div class="swiper-wrapper content">
+                <!-- Slide 1 -->
+                <div class="swiper-slide card1" id="card1_1">
+                    <div class="box2"></div>
+                    <div class="card1-content">
+                        <div class="image">
+                            <img src="~/assets1/img/Logo_AstraLearn.png" alt="Profile Image">
+                        </div>
+                        <div class="name-profession">
+                            <span class="name">John Doe</span>
+                            <span class="profession">Web Developer</span>
+                        </div>
+                        <div class="">
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi nobis sequi, nam tenetur magni.</p>
+                        </div>
+                        <div class="button b2">
+                            <button class="aboutMe">About Me</button>
+                            <button class="hireMe">Hire Me</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="swiper-slide card1" id="card1_2">
+                    <div class="box2"></div>
+                    <div class="card1-content">
+                        <div class="image">
+                            <img src="~/assets1/img/Logo_AstraLearn.png" alt="Profile Image">
+                        </div>
+                        <div class="name-profession">
+                            <span class="name">John Doe</span>
+                            <span class="profession">Web Developer II</span>
+                        </div>
+                        <div class="">
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi nobis sequi, nam tenetur magni.</p>
+                        </div>
+                        <div class="button b2">
+                            <button class="aboutMe">About Me</button>
+                            <button class="hireMe">Hire Me</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="swiper-slide card1" id="card1_3">
+                    <div class="box2"></div>
+                    <div class="card1-content">
+                        <div class="image">
+                            <img src="~/assets1/img/Logo_AstraLearn.png" alt="Profile Image">
+                        </div>
+                        <div class="name-profession">
+                            <span class="name">John Doe</span>
+                            <span class="profession">Web Developer III</span>
+                        </div>
+                        <div class="">
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi nobis sequi, nam tenetur magni.</p>
+                        </div>
+                        <div class="button b2">
+                            <button class="aboutMe">About Me</button>
+                            <button class="hireMe">Hire Me</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 4 -->
+                <div class="swiper-slide card1" id="card1_4">
+                    <div class="box2"></div>
+                    <div class="card1-content">
+                        <div class="image">
+                            <img src="~/assets1/img/Logo_AstraLearn.png" alt="Profile Image">
+                        </div>
+                        <div class="name-profession">
+                            <span class="name">John Doe</span>
+                            <span class="profession">Web Developer IV</span>
+                        </div>
+                        <div class="">
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi nobis sequi, nam tenetur magni.</p>
+                        </div>
+                        <div class="button b2">
+                            <button class="aboutMe">About Me</button>
+                            <button class="hireMe">Hire Me</button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="swiper-pagination swiper-pagination1"></div>
+        </div>
+        <div class="swiper-button-next swiper-button-next1"></div>
+        <div class="swiper-button-prev swiper-button-prev1"></div>
+    </section1>
+
+    <!-- Second Section - Teknik Elektro -->
+*@
+    <!-- Include the Swiper library -->
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Initialize the first swiper
+            var swiper1 = new Swiper("#swiper1", {
+                slidesPerView: 3,
+                spaceBetween: 10,
+                grabCursor: true,
+                slidesPerGroup: 1,
+                loop: false,
+                loopFillGroupWithBlank: true,
+                pagination: {
+                    el: ".swiper-pagination1",
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: ".swiper-button-next1",
+                    prevEl: ".swiper-button-prev1",
+                },
+            });
+
+            // Add click event listeners to individual slides in swiper1
+            document.querySelectorAll('#swiper1 .swiper-slide.card1').forEach(function (slide) {
+                slide.addEventListener('click', function () {
+                    var index = slide.getAttribute('id').split('_')[1];
+                    swiper1.slideTo(index);
+                });
+            });
+
+            
+        });
+    </script>
+
+    <!-- Additional styles for Swiper buttons -->
+    <style>
+        .swiper-container {
+            position: relative;
+        }
+
+        .swiper-button-next1,
+        .swiper-button-prev1 {
+            position: absolute;
+            top: 65%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            z-index: 1;
+        }
+
+        .swiper-button-prev1 {
+            left: 50px;
+        }
+
+        .swiper-button-next1 {
+            right: 50px;
+        }
+
+        .swiper-button-next2,
+        .swiper-button-prev2 {
+            position: absolute;
+            top: 70%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            z-index: 1;
+        }
+
+        .swiper-button-prev2 {
+            left: 50px;
+        }
+
+        .swiper-button-next2 {
+            right: 50px;
+        }
+
+        .swiper-slide.card1 .button {
+            position: absolute;
+            bottom: 20px; /* Sesuaikan dengan kebutuhan */
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section1 {
+            min-height: 78vh;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px; /* Adjust the margin as needed */
+        }
+    </style>
+</body1>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function fetchData() {
+            $.ajax({
+                url: "http://localhost:7043/Pelatihan/GetAllPelatihan",
+                type: "GET",
+                dataType: "json",
+                success: function (result) {
+                    if (result.status === 200) {
+                        populateCards(result.data);
+                    } else {
+                        console.error("Failed to fetch data.");
+                    }
+                },
+                error: function () {
+                    console.error("Error fetching data.");
+                }
+            });
+        }
+
+        // Function to populate cards with data
+        function populateCards(data) {
+            // Clear existing cards
+            $(".swiper-wrapper.content").empty();
+
+            // Iterate over the data and create cards
+            data.forEach(function (pelatihan, index) {
+                var videoThumbnailLink = getYouTubeThumbnailLink(pelatihan.youtube_video_id);
+
+                var cardHtml = `
+                        <div class="swiper-slide card1" id="card1_${index + 1}">
+                            <div class="box2"></div>
+                            <div class="card1-content">
+                                <div class="image">
+                                    <img src="${videoThumbnailLink}" alt="Video Thumbnail">
+                                </div>
+                                <div class="name-profession">
+                                    <span class="name">${pelatihan.nama_pelatihan}</span>
+                                    <span class="profession">${pelatihan.nama_klasifikasi}</span>
+                                </div>
+                                <div class="">
+                                    <p>${pelatihan.deskripsi_pelatihan}</p>
+                                </div>
+                                <div class="button b2">
+                                    <button class="aboutMe">About Me</button>
+                                    <button class="hireMe">Hire Me</button>
+                                </div>
+                            </div>
+                        </div>`;
+
+                // Append the card to the swiper
+                $(".swiper-wrapper.content").append(cardHtml);
+            });
+
+            // Initialize the swiper after populating cards
+            var swiper1 = new Swiper("#swiper1", {
+                slidesPerView: 3,
+                spaceBetween: 10,
+                grabCursor: true,
+                slidesPerGroup: 1,
+                loop: false,
+                loopFillGroupWithBlank: true,
+                pagination: {
+                    el: ".swiper-pagination1",
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: ".swiper-button-next1",
+                    prevEl: ".swiper-button-prev1",
+                },
+            });
+
+            // Add click event listeners to individual slides in swiper1
+            document.querySelectorAll('#swiper1 .swiper-slide.card1').forEach(function (slide) {
+                slide.addEventListener('click', function () {
+                    var index = slide.getAttribute('id').split('_')[1];
+                    swiper1.slideTo(index);
+                });
+            });
+        }
+
+        // Function to get YouTube video thumbnail link
+        function getYouTubeThumbnailLink(videoId) {
+            return `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+        }
+
+        // Fetch data when the page is loaded
+        fetchData();
+    });
+</script>

@@ -1,0 +1,333 @@
+﻿@{
+    ViewData["Title"] = "Admin - Klasifikasi Pelatihan";
+    Layout = "_Layout";
+}
+
+<div class="pagetitle">
+    <h1>Klasifikasi Pelatihan</h1>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="container-fluid">
+        <button class="btn btn-sm btn-primary mb-3" data-toggle="modal" data-target="#tambah_klasifikasi" style="background-color: #066CBB; color:seashell; border-radius: 7px; font-size: 20px;">
+            <i class="fas fa-plus fa-sm"></i> Tambah Klasifikasi
+        </button>
+        <!-- Table with stripped rows -->
+        <div class="table-responsive">
+            <table class="table table-striped" style="width:100%" id="dataTable">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Nama Klasifikasi</th>
+                        <th scope="col">Deskripsi</th>
+                        <th scope="col">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="tambah_klasifikasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="color: #464646; font-family: 'Poppins', sans-serif; font-weight: bold; font-size: 30px;">Form Tambah Klasifikasi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="myForm">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label class="control-label" for="NamaKlasifikasi" style="color: #066CBB; font-family: 'Poppins', sans-serif; ">Nama Klasifikasi *</label>
+                            <input id="NamaKlasifikasi" name="NamaKlasifikasi" class="form-control" />
+                            <span class="text-danger" id="errorNamaKlasifikasi"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="DeskripsiKlasifikasi" style="color: #066CBB; font-family: 'Poppins', sans-serif; ">Deskripsi Klasifikasi *</label>
+                            <input id="DeskripsiKlasifikasi" name="DeskripsiKlasifikasi" class="form-control" />
+                            <span class="text-danger" id="errorDeskripsiKlasifikasi"></span>
+                        </div>
+                        <br>
+                        <div class="form-group text-right">
+                            <input type="submit" value="Simpan" id="buttonCreate" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="edit_klasifikasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="color: #464646; font-family: 'Poppins', sans-serif; font-weight: bold; font-size: 30px;">Form Edit Klasifikasi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label class="control-label" for="EditNamaKlasifikasi" style="color: #066CBB; font-family: 'Poppins', sans-serif; ">Nama Klasifikasi *</label>
+                            <input id="EditNamaKlasifikasi" name="EditNamaKlasifikasi" class="form-control" />
+                            <span class="text-danger" id="errorEditNamaKlasifikasi"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="EditDeskripsiKlasifikasi" style="color: #066CBB; font-family: 'Poppins', sans-serif; ">Deskripsi Klasifikasi *</label>
+                            <input id="EditDeskripsiKlasifikasi" name="EditDeskripsiKlasifikasi" class="form-control" />
+                            <span class="text-danger" id="errorEditDeskripsiKlasifikasi"></span>
+                        </div>
+                        <br>
+                        <div class="form-group text-right">
+                            <input type="submit" value="Simpan" id="buttonUpdate" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<style>
+    .section {
+        min-height: 78vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container-fluid {
+        flex: 1;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var rootHost = "http://localhost:7043";
+        var klasifikasiId;
+
+        new DataTable('#dataTable', {
+            ajax: {
+                url: rootHost + '/KlasifikasiPelatihan/GetAllKlasifikasiPelatihan',
+                type: "GET",
+                dataSrc: function (data) {
+                    console.log(data.data)
+                    return data.data; 
+                }
+            },
+            columns: [
+                { data: null },
+                { data: 'nama_klasifikasi' },
+                { data: 'deskripsi' },
+                { data: null },
+            ],
+            columnDefs: [
+                {
+                    targets: 0,
+                    render: function (data, type, row, index) {
+                        return index.row + 1;
+                    }
+                },
+                {
+                    targets: 3,
+                    render: function (data, type, row, index) {
+                        const deleteButton = '<button class="btn btn-sm btn-danger delete-button" style="background-color:#BB0000 border-radius: 5px;"><i class="bi bi-trash"></i></button>';
+                        const editButton = '<button class="btn btn-primary btn-sm edit-button" data-toggle="modal" data-target="#edit_klasifikasi" data-id="' + row.id_klasifikasi + '" style="background-color: #066CBB; border-radius: 5px;"><i class="bi bi-exclamation-triangle"></i></button>';
+                        return editButton + " " + deleteButton;
+                    }
+                }
+            ],
+            createdRow: function (row, data, dataIndex) {
+                $(row).attr('data-id', data.id_klasifikasi);
+                $(row).attr('data-type', 'klasifikasi');
+            }
+        });
+
+
+        function tambahKlasifikasi() {
+            var namaKlasifikasi = $("#NamaKlasifikasi").val();
+            var deskripsiKlasifikasi = $("#DeskripsiKlasifikasi").val();
+            if (!namaKlasifikasi.trim()) {
+                $("#errorNamaKlasifikasi").text("Nama Klasifikasi tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorNamaKlasifikasi").text("");
+            }
+
+            if (!deskripsiKlasifikasi.trim()) {
+                $("#errorDeskripsiKlasifikasi").text("Deskripsi Klasifikasi tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorDeskripsiKlasifikasi").text("");
+            }
+
+            var data = {
+                id_klasifikasi: 0,
+                nama_klasifikasi: namaKlasifikasi,
+                jumlah_pelatihan: 0,
+                deskripsi: deskripsiKlasifikasi
+            };
+
+            $.ajax({
+                url: rootHost + '/KlasifikasiPelatihan/InsertKlasifikasiPelatihan',
+                method: "post",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (data) {
+                    notifikasiTambahSukses();
+                },
+                error: function () {
+                    
+                }
+            });
+        }
+
+        $("#myForm").submit(function (e) {
+            e.preventDefault();
+            tambahKlasifikasi();
+        });
+
+        $(document).on("click", ".delete-button", function () {
+            klasifikasiId = $(this).closest('tr').data("id");
+
+            Swal.fire({
+                title: "Hapus Klasifikasi?",
+                text: "Apakah anda ingin menghapus klasifikasi ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya",
+                cancelButtonText: "Tidak"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: rootHost + '/KlasifikasiPelatihan/DeleteKlasifikasiPelatihan?id=' + klasifikasiId,
+                        type: "POST",
+                        success: function (data) {
+                            notifikasiHapusSukses();
+                        },
+                        error: function () {
+                            Swal.fire("Error!", "Terjadi kesalahan.", "error");
+                        }
+                    });
+                }
+            });
+        });
+
+        $('#dataTable').on('click', 'button.edit-button', function () {
+            klasifikasiId = $(this).data('id');
+            // Fetch existing data for the selected classification
+            $.ajax({
+                url: rootHost + '/KlasifikasiPelatihan/GetKlasifikasiPelatihan?id=' + klasifikasiId,
+                type: 'GET',
+                success: function (response) {
+                    if (response && response.data) {
+                        var data = response.data;
+
+                        $('#edit_klasifikasi').modal('show');
+                        $('#EditNamaKlasifikasi').val(data.nama_klasifikasi);
+                        $('#EditDeskripsiKlasifikasi').val(data.deskripsi);
+                    } else {
+                        console.error("Invalid response format:", response);
+                        Swal.fire('Error!', 'Terjadi kesalahan dalam format respons.', 'error');
+                    }
+                },
+
+                error: function () {
+                    Swal.fire('Error!', 'Terjadi kesalahan.', 'error');
+                }
+            });
+        });
+
+        function ubahKlasifikasi() {
+            var namaKlasifikasi = $("#EditNamaKlasifikasi").val();
+            var deskripsiKlasifikasi = $("#EditDeskripsiKlasifikasi").val();
+
+            if (!namaKlasifikasi.trim()) {
+                $("#errorEditNamaKlasifikasi").text("Nama Klasifikasi tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorEditNamaKlasifikasi").text("");
+            }
+
+            if (!deskripsiKlasifikasi.trim()) {
+                $("#errorEditDeskripsiKlasifikasi").text("Deskripsi Klasifikasi tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorEditDeskripsiKlasifikasi").text("");
+            }
+
+            var data = {
+                id_klasifikasi: klasifikasiId, // Use the ID obtained when clicking the edit button
+                nama_klasifikasi: namaKlasifikasi,
+                deskripsi: deskripsiKlasifikasi,
+                jumlah_pelatihan: 0
+            };
+            console.log(data);
+            $.ajax({
+                url: rootHost + '/KlasifikasiPelatihan/UpdateKlasifikasiPelatihan',
+                method: 'post',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function (data) {
+                    notifikasiUpdateSukses();
+                },
+                error: function () {
+
+                }
+            });
+        }
+
+        $("#editForm").submit(function (e) {
+            e.preventDefault();
+            ubahKlasifikasi();
+        });
+
+            
+        function notifikasiTambahSukses() {
+            Swal.fire({
+                title: "Sukses!",
+                text: "Data Klasifikasi Pelatihan berhasil ditambahkan.",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "OK"
+            }).then(() => {
+                location.reload();
+            });
+        }
+
+        function notifikasiUpdateSukses() {
+            Swal.fire({
+                title: "Sukses!",   
+                text: "Data Klasifikasi Pelatihan berhasil diubah.",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "OK"
+            }).then(() => {
+                location.reload();
+            });
+        }
+
+        function notifikasiHapusSukses() {
+            Swal.fire({
+                title: "Sukses!",   
+                text: "Data Klasifikasi Pelatihan berhasil dihapus.",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "OK"
+            }).then(() => {
+                location.reload();
+            });
+        }
+
+        $('#edit_klasifikasi .close').on('click', function () {
+            $('#edit_klasifikasi').modal('hide');
+        });
+    });
+</script>

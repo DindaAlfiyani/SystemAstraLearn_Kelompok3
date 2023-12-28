@@ -1,0 +1,554 @@
+﻿@{
+    ViewData["Title"] = "Section Peserta";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>AstraLearn</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="~/assets1/img/AstraLearn_favicon.png" rel="icon">
+    <link href="~/assets1/img/AstraLearn.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="~/assets1/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/assets1/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/assets1/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="~/assets1/vendor/quill/quill.snow.css" rel="stylesheet">
+    <link href="~/assets1/vendor/quill/quill.bubble.css" rel="stylesheet">
+    <link href="~/assets1/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="~/assets1/vendor/simple-datatables/style.css" rel="stylesheet">
+    <!-- jQuery -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+
+    <!-- Template Main CSS File -->
+    <link href="~/assets1/css/style.css" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Swipper CSS -->
+    <link href="~/assets/css/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Required meta tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    @*<link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">*@
+
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <link rel="stylesheet" href="~/assets1/fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="~/assets1/css/owl.carousel.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/assets1/css/bootstrap.min.css">
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- =======================================================
+    * Template Name: NiceAdmin
+    * Updated: Sep 18 2023 with Bootstrap v5.3.2
+    * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body>
+
+    @if (Context.Session.GetString("Peran") == "Pelatih" || Context.Session.GetString("Peran") == "Peserta" || Context.Session.GetString("Peran") == "Admin")
+    {
+        <!-- ======= Header ======= -->
+        <header id="header" class="header fixed-top d-flex align-items-center">
+
+            <div class="d-flex align-items-center justify-content-between">
+                @if (@Context.Session.GetString("Peran") == "Pelatih")
+                {
+                    <a class="nav-link collapsed logo d-flex align-items-center" asp-controller="Pelatih" asp-action="Index">
+                        <img src="~/assets/img/Logo_AstraLearn.png" alt="">
+                    </a>
+                }
+
+                @if (@Context.Session.GetString("Peran") == "Admin")
+                {
+                    <a class="nav-link collapsed logo d-flex align-items-center" asp-controller="Admin" asp-action="Index">
+                        <img src="~/assets/img/Logo_AstraLearn.png" alt="">
+                    </a>
+                }
+
+                @if (@Context.Session.GetString("Peran") == "Peserta")
+                {
+                    <a class="nav-link collapsed logo d-flex align-items-center" asp-controller="Peserta" asp-action="Index">
+                        <img src="~/assets/img/Logo_AstraLearn.png" alt="">
+                    </a>
+                }
+            </div><!-- End Logo -->
+
+            <nav class="header-nav ms-auto">
+                <ul class="d-flex align-items-center">
+                    <li class="nav-item d-flex align-items-center"><a class="nav-link nav-icon" asp-controller="Home" asp-action="CaraBelajar" style="color: #006CBB; font-weight: 500;">Cara Belajar</a></li>
+                    <li class="nav-item d-flex align-items-center"><a class="nav-link nav-icon" asp-controller="Home" asp-action="Kelas" style="color: #006CBB; font-weight: 500;">Kelas</a></li>
+                    <li class="nav-item d-flex align-items-center"><a class="nav-link nav-icon" asp-controller="Home" asp-action="CaraDapatSertifikat" style="color: #006CBB; font-weight: 500;">Cara Dapat Sertifikat</a></li>
+
+                    <li class="nav-item d-block d-lg-none">
+                        <a class="nav-link nav-icon search-bar-toggle " href="#">
+                            <i class="bi bi-search"></i>
+                        </a>
+                    </li><!-- End Search Icon-->
+                    @if (@Context.Session.GetString("User") != null)
+                    {
+                        var IsLoggedIn = Context.Session.GetString("User");
+                        var loggedInUserId = Context.Session.GetInt32("Id");
+                        <input type="hidden" id="idLogin" value="@loggedInUserId" />
+                        <a class="nav-link nav-profile d-flex align-items-center" href="#">
+                            <span class="d-none d-md-block">@IsLoggedIn </span>
+                            @*<span class="d-none d-md-block">@loggedInUserId </span>*@
+                        </a>
+
+                        <!-- End Profile Image Icon -->
+                        <!-- End Profile Image Icon -->
+
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                            <li class="dropdown-header">
+                                <h6>@IsLoggedIn</h6>
+                                <span>@loggedInUserId</span>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                                    <i class="bi bi-person"></i>
+                                    <span>My Profile</span>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                                    <i class="bi bi-gear"></i>
+                                    <span>Account Settings</span>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                                    <i class="bi bi-question-circle"></i>
+                                    <span>Need Help?</span>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    <span>Sign Out</span>
+                                </a>
+                            </li>
+
+                        </ul>
+
+                        <!-- End Profile Dropdown Items -->
+                    }
+                </ul>
+            </nav><!-- End Icons Navigation -->
+        </header>
+
+        <!-- End Header -->
+    }
+    else
+    {
+        <!-- ======= Header ======= -->
+        <header id="header" class="header fixed-top d-flex align-items-center">
+            <div class="d-flex align-items-center justify-content-between">
+                <a href="index.html" class="logo d-flex align-items-center">
+                    <img src="~/assets/img/Logo_AstraLearn.png" alt="">
+                </a>
+            </div><!-- End Logo -->
+
+            <nav class="header-nav ms-auto">
+                <ul class="d-flex align-items-center">
+                    <li class="nav-item d-flex align-items-center"><a class="nav-link nav-icon" asp-controller="Home" asp-action="CaraBelajar">Cara Belajar</a></li>
+                    <li class="nav-item d-flex align-items-center"><a class="nav-link nav-icon" asp-controller="Home" asp-action="Kelas">Kelas</a></li>
+                    <li class="nav-item d-flex align-items-center"><a class="nav-link nav-icon" asp-controller="Home" asp-action="CaraDapatSertifikat">Cara Dapat Sertifikat</a></li>
+                    <li class="nav-item d-block d-lg-none">
+                        <a class="nav-link nav-icon search-bar-toggle " href="#">
+                            <i class="bi bi-search"></i>
+                        </a>
+                    </li><!-- End Search Icon-->
+                    <form asp-controller="Home" asp-action="Index" method="post">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </form>
+                </ul>
+            </nav><!-- End Icons Navigation -->
+        </header>
+    }
+    <!-- End Header -->
+    <!-- ======= Sidebar ======= -->
+    <aside id="sidebar1" class="sidebar1">
+
+        <ul class="sidebar1-nav" id="sidebar1-nav" style="background-color: #EFF7FB;">
+            
+
+        </ul>
+
+    </aside><!-- End Sidebar-->
+
+    @*@RenderSection("scripts", required: false)*@
+
+    <main id="main1" class="main1">
+
+        <section class="section">
+            @RenderBody()
+        </section>
+
+    </main><!-- End #main -->@*
+    @RenderSection("scripts", required: false)*@
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+        <div class="copyright">
+            &copy; Copyright <strong><span>Astra Learn</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+            <!-- All the links in the footer should remain intact. -->
+            <!-- You can delete the links only if you purchased the pro version. -->
+            <!-- Licensing information: https://bootstrapmade.com/license/ -->
+            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+            Designed by <a href="https://bootstrapmade.com/">LabibGaming</a>
+        </div>
+    </footer><!-- End Footer -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="~/assets1/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="~/assets1/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets1/vendor/chart.js/chart.umd.js"></script>
+    <script src="~/assets1/vendor/echarts/echarts.min.js"></script>
+    <script src="~/assets1/vendor/quill/quill.min.js"></script>
+    <script src="~/assets1/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="~/assets1/vendor/tinymce/tinymce.min.js"></script>
+    <script src="~/assets1/vendor/php-email-form/validate.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="~/assets1/js/main.js"></script>
+    <!-- Bootstrap CSS -->
+    <!-- Swipper JS -->
+    <script src="~/assets/js/swiper-bundle.min.js"></script>
+
+    <!-- JavaScript -->
+    <script src="~/assets1/js/script.js"></script>
+
+    <script src="~/assets1/js/jquery-3.3.1.min.js"></script>
+    <script src="~/assets1/js/popper.min.js"></script>
+    <script src="~/assets1/js/bootstrap.min.js"></script>
+    <script src="~/assets1/js/owl.carousel.min.js"></script>
+
+    <!-- Pada halaman Buku -->
+    <script>
+        // Cek apakah sudah pernah diklik sebelumnya
+        var isIconChanged = localStorage.getItem('iconChanged');
+
+        // Jika sudah diklik sebelumnya, ubah ikon
+        if (isIconChanged) {
+            var circleIcon = document.getElementById('circleIcon');
+            circleIcon.className = 'bi bi-check-circle-fill';
+        }
+
+        function changeIconAndNavigate() {
+            var circleIcon = document.getElementById('circleIcon');
+
+            // Ganti ikon menjadi bi-check-circle-fill
+            circleIcon.className = 'bi bi-check-circle-fill';
+
+            // Simpan status ikon di localStorage
+            localStorage.setItem('iconChanged', true);
+
+        }
+    </script>
+
+
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var rootHost = "http://localhost:5180";
+        var rootWebHost = "https://localhost:7157/MengikutiPelatihan/";
+        var rootWebHost2 = "https://localhost:7157/Peserta/Kelas";
+        var IdPelatihan = $("#idPelatihan").val();
+        var rootWebHost3 = "https://localhost:7157/MengerjakanExam/";
+        var rootWebHost4 = "https://localhost:7157/ExamDone/";
+        var idPembantu;
+        var IdLogin = $("#idLogin").val();
+
+        function loadRiwayat() {
+            $.ajax({
+                url: rootHost + '/MengikutiPelatihan/GetMengikutiPelatihan?id_pengguna=' + IdLogin + '&id_pelatihan=' + IdPelatihan,
+                method: 'get',
+                contentType: 'application/json',
+                success: function (response) {
+                    loadSideBar(response.data.riwayat_section);
+                    console.log(response.data.riwayat_section);
+                },
+                error: function () {
+                    console.error("Failed to load sections data.");
+                }
+            });
+        }
+
+        function loadSideBar(riwayat) {
+            var nama = $("#namaPelatihan").val();
+            $.ajax({
+                url: rootHost + '/Section/GetAllSectionsById?id=' + IdPelatihan,
+                method: 'get',
+                contentType: 'application/json',
+                success: function (response) {
+                    if (response.status === 200) {
+                        for (var i = 0; i < riwayat; i++) {
+                            if(i <= riwayat-1){
+                                sideBarDone(response.data[i], nama, i);
+                            }
+                        }
+
+                        i--;
+
+                        if (response.data.length > riwayat) {
+                            updateSidebar(response.data[riwayat], nama, riwayat);
+
+                            for (var i = riwayat + 1; i < response.data.length; i++) {
+                                updateSidebar2(response.data[i], nama, i);
+                            }
+                        }
+
+                        if (response.data.length < riwayat) {
+                            buttonExam2(response.data[1], nama, i++);
+                        } else {
+                            buttonExam(response.data[1], nama, i++);
+                        }
+                        addButtonBack();
+                    } else {
+                        console.error("Failed to load sections data.");
+                    }
+                },
+                error: function () {
+                    console.error("Failed to load sections data.");
+                }
+            });
+        }
+
+        function sideBarDone(section, nama, index) {
+            if (section && section.id_pelatihan != null) {
+                var sidebarNav = $("#sidebar1-nav");
+                var listItem = $("<li>").addClass("nav-item");
+                var link = $("<a>")
+                    .addClass("nav-link collapsed")
+                    .attr("href", "#")
+                    .click(function () {
+                        updateHref(section.id_section, section.id_pelatihan, nama);
+                    });
+
+                var icon = $("<i id='" + section.id_section + "'>").addClass("bi bi-check-circle-fill");
+                var h5 = $("<h5>").addClass("ms-2 mb-0").html(icon).append((index + 1) + ". " + section.nama_section);
+
+                // Menambahkan gaya font-weight dengan angka
+                h5.css("font-weight", "bold");
+
+                link.append(h5);
+                listItem.append(link);
+                sidebarNav.append(listItem);
+                $(".lanjut-btn").hide();
+            }
+        }
+
+
+        function updateSidebar(section, nama, index) {
+            var sidebarNav = $("#sidebar1-nav");
+            var listItem = $("<li>").addClass("nav-item");
+            var link = $("<a>")
+                .addClass("nav-link collapsed")
+                .attr("href", "#")
+                .click(function () {
+                    updateHref(section.id_section, section.id_pelatihan, nama);
+                });
+
+            var icon = $("<i id='" + section.id_section + "'>").addClass("bi bi-circle");
+            var h5 = $("<h5>").addClass("ms-2 mb-0").html(icon).append((index + 1) + ". " + section.nama_section);
+
+            // Menambahkan gaya font-weight dengan angka
+            h5.css("font-weight", "bold");
+
+            link.append(h5);
+            listItem.append(link);
+            sidebarNav.append(listItem);
+        }
+
+        function updateSidebar2(section, nama, index) {
+            var sidebarNav = $("#sidebar1-nav");
+            var listItem = $("<li>").addClass("nav-item");
+            var link = $("<a>")
+                .addClass("nav-link collapsed")
+                .attr("href", "javascript:void(0)");
+
+            var icon = $("<i id='" + section.id_section + "'>").addClass("bi bi-circle");
+            var h5 = $("<h5>")
+                .addClass("ms-2 mb-0 text-muted")  // Tambahkan kelas "text-muted" untuk warna abu-abu
+                .html(icon)
+                .append((index + 1) + ". " + section.nama_section);
+
+            // Menambahkan gaya font-weight dengan angka
+            h5.css("font-weight", "bold");
+
+            link.append(h5);
+            listItem.append(link);
+            sidebarNav.append(listItem);
+        }
+
+        function examMuted(section) {
+            var exam = 'Exam';
+            var sidebarNav = $("#sidebar1-nav");
+            var listItem = $("<li>").addClass("nav-item");
+            var link = $("<a>")
+                .addClass("nav-link collapsed text-muted") // Tambahkan kelas "text-muted" untuk warna abu-abu
+                .click(function () {
+                    // Panggil fungsi yang akan dijalankan saat tombol "Exam Muted" diklik
+                    onExamMutedButtonClick();
+                })
+                .attr("href", "javascript:void(0)")
+                .prop("disabled", true);
+
+            var icon = $("<i id='" + section.id_pelatihan + "'>").addClass("bi bi-circle");
+            var h5 = $("<h5>")
+                .addClass("ms-2 mb-0")
+                .html(icon)
+                .append(exam);
+
+            h5.css("font-weight", "bold");
+
+            link.append(h5);
+            listItem.append(link);
+            sidebarNav.append(listItem);
+        }
+
+        function buttonExam(section, nama, index) {
+            var exam = 'Exam';
+            var sidebarNav = $("#sidebar1-nav");
+            var listItem = $("<li>").addClass("nav-item");
+            var link = $("<a>")
+                .addClass("nav-link collapsed")
+                .attr("href", "javascript:void(0)")
+                .click(function () {
+                    onExamButtonClick();
+                });
+
+            var icon = $("<i id='" + section.id_pelatihan + "'>").addClass("bi bi-circle");
+            var h5 = $("<h5>")
+                .addClass("ms-2 mb-0")  // Hapus kelas "text-muted" agar tidak abu-abu
+                .html(icon)
+                .append(exam);
+
+            // Menambahkan gaya font-weight dengan angka
+            h5.css("font-weight", "bold");
+
+            link.append(h5);
+            listItem.append(link);
+            sidebarNav.append(listItem);
+        }
+
+        function buttonExam2(section, nama, index) {
+            var exam = 'Exam';
+            var sidebarNav = $("#sidebar1-nav");
+            var listItem = $("<li>").addClass("nav-item");
+            var link = $("<a>")
+                .addClass("nav-link collapsed")
+                .attr("href", "javascript:void(0)")
+                .click(function () {
+                    onExamButtonClick2();
+                });
+
+            var icon = $("<i id='" + section.id_pelatihan + "'>").addClass("bi bi-check-circle-fill");
+            var h5 = $("<h5>")
+                .addClass("ms-2 mb-0")  // Hapus kelas "text-muted" agar tidak abu-abu
+                .html(icon)
+                .append(exam);
+
+            // Menambahkan gaya font-weight dengan angka
+            h5.css("font-weight", "bold");
+
+            link.append(h5);
+            listItem.append(link);
+            sidebarNav.append(listItem);
+        }
+
+
+        function onExamButtonClick() {
+            var newHref = rootWebHost3 + IdPelatihan + '/' + 2 + '/Mengerjakan';
+            window.location.href = newHref;
+        }
+
+        function onExamButtonClick2() {
+            var newHref = rootWebHost4 + IdPelatihan + '/' + 2 + '/Mengerjakan';
+            window.location.href = newHref;
+        }
+
+        function addButtonBack(){
+            var sidebarNav = $("#sidebar1-nav");
+            var backListItem = $("<li>").addClass("nav-item");
+            var backButton = $("<a>")
+                .addClass("nav-link collapsed")
+                .attr("href", "#")
+                .click(function () {
+                    goBack();
+                })
+                .html("<i class='bi bi-arrow-left'></i><h5 class='ms-2 mb-0 font-weight-bold'>Kembali</h5>");
+
+            backListItem.append(backButton);
+            sidebarNav.append(backListItem);
+        }
+
+        function goBack() {
+            window.location.href = rootWebHost2;
+        }
+
+        function updateHref(id, id1, nama) {
+            var newHref = rootWebHost + id1 + "/" + id + "/" + nama;
+            window.location.href = newHref;
+        }
+
+        loadRiwayat();
+    });
+</script>
+
+</html>

@@ -1,0 +1,135 @@
+﻿@{
+    ViewData["Title"] = "Dashboard Admin";
+    Layout = "_Layout";
+}
+
+<div class="pagetitle" style="margin-bottom: 50px;">
+            <h1>Dashboard</h1>
+        </div><!-- End Page Title -->
+
+<section class="section dashboard">
+    <div class="row">
+        <div class="container">
+            <div class="row">
+                <!-- Sales Card -->
+                <div class="col-xxl-6">
+                    <div class="card info-card sales-card" style="border-radius: 15px; height: 210px;">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon1 d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-file-earmark-text-fill" style="color: #006CBB; font-size: 4em; "></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h1 id="jumlahPelatihan" style="color: #006CBB; font-size: 50px; font-family: Poppins, sans-serif;">145</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-header1 card-title1">Jumlah Pelatihan</div>
+                    </div>
+                </div>
+
+                <div class="col-xxl-6">
+                    <div class="card info-card sales-card" style="border-radius: 15px; height: 210px;">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon1 d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-file-earmark-person-fill" style="color: #006CBB; font-size: 4em;"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h1 id="jumlahPeserta" style="color: #006CBB; font-size: 50px;">123</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-header1 card-title1">Jumlah Peserta</div>
+                    </div>
+                </div>
+
+                <div class="col-xxl-6">
+                    <div class="card info-card sales-card" style="border-radius: 15px; height: 210px;">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon1 d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-file-earmark-bar-graph-fill" style="color: #006CBB; font-size: 4em;"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h1 id="pelatihanBerjalan" style="color: #006CBB; font-size: 50px;">93</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-header1 card-title1">Pelatihan Berjalan</div>
+                    </div>
+                </div>
+
+                <div class="col-xxl-6">
+                    <div class="card info-card sales-card" style="border-radius: 15px; height: 210px;">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon1 d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-file-earmark-check-fill" style="color: #006CBB; font-size: 4em;"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h1 id="pelatihanSelesai" style="color: #006CBB; font-size: 50px;">30</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-header1 card-title1">Pelatihan Diselesaikan</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+</section>
+<script>
+    $(document).ready(function () {
+        var rootHost = "http://localhost:7043";
+        var jumlahPelatihan;
+        var jumlahPeserta;
+        var jumlahSelesai;
+        var jumlahBerjalan;
+
+        $.ajax({
+            url: rootHost + '/Pelatihan/GetAllPelatihan',
+            method: 'get',
+            contentType: 'application/json',
+            success: function (response) {
+                jumlahPelatihan = response.data.length;
+                console.log(jumlahPelatihan); // Move the console.log inside the success callback
+                $('#jumlahPelatihan').text(jumlahPelatihan);
+            },
+            error: function () {
+                console.error("Failed to load sections data.");
+            }
+        });
+
+        $.ajax({
+            url: rootHost + '/MengikutiPelatihan/GetAllMengikutiPelatihan',
+            method: 'get',
+            contentType: 'application/json',
+            success: function (response) {
+                jumlahPeserta = response.data.length;
+                console.log(jumlahPeserta);
+                $('#jumlahPeserta').text(jumlahPeserta);
+            },
+            error: function () {
+                console.error("Failed to load sections data.");
+            }
+        });
+
+        $.ajax({
+            url: rootHost + '/Sertifikat/GetAllSertifikat',
+            method: 'get',
+            contentType: 'application/json',
+            success: function (response) {
+                jumlahSelesai = response.data.length;
+                console.log(jumlahSelesai);
+                jumlahBerjalan = jumlahPeserta - jumlahSelesai;
+                $('#pelatihanBerjalan').text(jumlahBerjalan);
+                $('#pelatihanSelesai').text(jumlahSelesai);
+            },
+            error: function () {
+                console.error("Failed to load sections data.");
+            }
+        });
+    }); 
+</script>
+    

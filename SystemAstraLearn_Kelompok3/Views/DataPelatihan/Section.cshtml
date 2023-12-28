@@ -1,0 +1,207 @@
+﻿@{
+    ViewData["Title"] = "Pelatih - Pelatihan";
+    Layout = "_LayoutSectionPelatih";
+}
+
+<div class="pagetitle">
+    <h1>Daftar Section</h1>
+    <h4>@(ViewBag.namaPelatihan)</h4>
+    <input type="hidden" id="idPelatihan" value="@ViewBag.idPelatihan" />
+</div>
+
+<section class="section">
+    <div class="modal fade" id="tambah_section" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="color: #464646; font-family: 'Poppins', sans-serif; font-weight: bold; font-size: 30px;">Form Tambah Section</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="myForm">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label class="control-label" for="NamaSection" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Nama Section *</label>
+                            <input id="NamaSection" name="NamaSection" class="form-control" />
+                            <span class="text-danger" id="errorNamaSection"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="DeskripsiSection" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Deskripsi Section *</label>
+                            <input id="DeskripsiSection" name="DeskripsiSection" class="form-control" />
+                            <span class="text-danger" id="errorDeskripsiSection"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="VideoPembelajaran" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Video Pembelajaran *</label>
+                            <input type="file" id="VideoPembelajaran" name="VideoPembelajaran" class="form-control" accept="video/*" />
+                            <span class="text-danger" id="errorVideoPembelajaran"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="ModulPembelajaran" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Modul Pembelajaran *</label>
+                            <input type="file" id="ModulPembelajaran" name="ModulPembelajaran" class="form-control" accept=".pdf" />
+                            <span class="text-danger" id="errorModulPembelajaran"></span>
+                        </div>
+                        <br>
+                        <div class="form-group text-right">
+                            <input type="submit" value="Tambah" id="buttonCreate" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<style>
+    .section {
+        min-height: 178vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container-fluid {
+        flex: 1;
+    }
+
+    .pagetitle {
+        text-align: center;
+        margin-top: 50px; /* Adjust the margin-top value as needed */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .pagetitle h1,
+    .pagetitle h4 {
+        margin: 10px 0; /* Adjust the margin as needed */
+    }
+
+    .pagetitle button {
+        margin-top: 10px; /* Adjust the margin-top value between buttons as needed */
+    }
+
+    #idPelatihan {
+        margin-top: 10px; /* Adjust the margin-top value for the input as needed */
+    }
+
+    #main {
+        padding-bottom: 627px; /* Adjust as needed */
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        var IdPelatihan = $("#idPelatihan").val();
+        var rootHost = "http://localhost:7043";
+
+        $("#myForm").submit(function (e) {
+            e.preventDefault();
+
+            var namaSection = $("#NamaSection").val();
+            var deskripsi = $("#DeskripsiSection").val();
+            var vidio = $("#VidioPembelajaran").val();
+            var modul = $("#ModulPembelajaran")[0].files[0];
+
+            // Validasi form
+            if (!namaSection.trim()) {
+                $("#errorNamaSection").text("Nama Section tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorNamaSection").text("");
+            }
+
+            if (!deskripsi.trim()) {
+                $("#errorDeskripsiSection").text("Deskripsi PelatihanSection tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorDeskripsiSection").text("");
+            }
+
+            if (!vidio.trim()) {
+                $("#errorVidioSection").text("Vidio PelatihanSection tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorVidioSection").text("");
+            }
+
+            // Ekstrak ID video YouTube jika ada
+            var videoId = extractYouTubeVideoId(vidio);
+            if (videoId) {
+                vidio = videoId;
+            }
+
+            // Upload berkas modul jika ada
+            if (modul) {
+                uploadFile(modul);
+            }
+
+            // Persiapkan data untuk dikirim ke server
+            var data = {
+                id_section: 0,
+                id_pelatihan: IdPelatihan,
+                nama_section: namaSection,
+                video_pembelajaran: vidio,
+                modul_pembelajaran: modul ? modul.name : null,
+                deskripsi: deskripsi
+            };
+
+            // Kirim data ke server menggunakan AJAX
+            $.ajax({
+                url: rootHost + '/Section/InsertSection',
+                method: "post",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (data) {
+                    notifikasiTambahSukses();
+                },
+                error: function () {
+                    // Handle error
+                }
+            });
+        });
+
+        // Fungsi ekstrak ID video YouTube
+        function extractYouTubeVideoId(url) {
+            var regex = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+            var match = url.match(regex);
+            return match ? match[1] : null;
+        }
+
+        // Fungsi upload berkas
+        function uploadFile(file) {
+            var formData = new FormData();
+            formData.append("file", file);
+
+            $.ajax({
+                url: rootHost + '/Section/UploadFile',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    // Handle success, if needed
+                    console.log("File uploaded successfully");
+                },
+                error: function () {
+                    // Handle error, if needed
+                    console.log("Error uploading file");
+                }
+            });
+        }
+
+        // Fungsi notifikasi tambah sukses
+        function notifikasiTambahSukses() {
+            Swal.fire({
+                title: "Sukses!",
+                text: "Data Pelatihan berhasil ditambahkan.",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "OK"
+            }).then(() => {
+                location.reload();
+            });
+        }
+    });
+
+</script>
+

@@ -1,0 +1,198 @@
+﻿@{
+    ViewData["Title"] = "Admin - Kelola Hak Akses";
+    Layout = "_Layout";
+}
+
+<div class="pagetitle">
+    <h1>Kelola Hak Akses</h1>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="container-fluid">
+        <div class="table-responsive">
+            <table class="table table-striped" style="width:100%" id="dataTable">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Nama</th>
+                        <th scope="col">Hak Akses</th>
+                        <th scope="col">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal Edit Pengguna -->
+    <div class="modal fade" id="edit_pengguna" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="color: #464646; font-family: 'Poppins', sans-serif; font-weight: bold; font-size: 30px;">Form Edit Hak Akses</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <div class="form-group">
+                            <label class="control-label" for="EditUsername" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Username *</label>
+                            <input id="EditUsername" name="EditUsername" class="form-control" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="EditNama" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Nama *</label>
+                            <input id="EditNama" name="EditNama" class="form-control" readonly/>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="EditHakAkses" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Hak Akses *</label>
+                            <select id="EditHakAkses" name="EditHakAkses" class="form-control">
+                            </select>
+                        </div>
+                        <br>
+                        <div class="form-group text-right">
+                            <input type="submit" value="Simpan" id="buttonUpdate" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<style>
+    .section {
+        min-height: 76vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container-fluid {
+        flex: 1;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var rootHost = "http://localhost:7043";
+        var userId;
+
+        new DataTable('#dataTable', {
+            ajax: {
+                url: rootHost + '/Pengguna/GetAllPengguna',
+                type: "GET",
+                dataSrc: function (data) {
+                    return data.data;
+                }
+            },
+            columns: [
+                { data: null },
+                { data: 'username' },
+                { data: 'nama_lengkap' },
+                { data: 'hak_akses' },
+                { data: null },
+            ],
+            columnDefs: [
+                {
+                    targets: 0,
+                    render: function (data, type, row, index) {
+                        return index.row + 1;
+                    }
+                },
+                {
+                    targets: 4,
+                    render: function (data, type, row, index) {
+                        const editButton = '<button class="btn btn-sm btn-warning mb-3 edit-button" data-toggle="modal" data-target="#ubah_nilai_minimum" data-id="' + row.id_pengguna + '" style="background-color: #066CBB; color:seashell; border-radius: 7px; font-size: 20px;">' +
+                            '<i class="fas fa-edit fa-sm"></i> Kelola Akses' +
+                            '</button>';
+                        return editButton;
+                    }
+                }
+
+            ],
+            createdRow: function (row, data, dataIndex) {
+                $(row).attr('data-id', data.id_pengguna);
+                $(row).attr('data-type', 'pengguna');
+            }
+        });
+
+        $(document).on("click", ".edit-button", function () {
+            var username = $(this).closest('tr').find('td:eq(1)').text();
+            var nama = $(this).closest('tr').find('td:eq(2)').text();
+            var hakAkses = $(this).closest('tr').find('td:eq(3)').text();
+
+            $("#EditUsername").val(username);
+            $("#EditNama").val(nama);
+
+            $("#EditHakAkses").empty();
+            var options = ["Peserta", "Pelatih", "Admin"];
+            for (var i = 0; i < options.length; i++) {
+                var option = $('<option>', {
+                    value: options[i],
+                    text: options[i]
+                });
+                if (options[i] === hakAkses) {
+                    option.attr('selected', 'selected');
+                }
+
+                $("#EditHakAkses").append(option);
+            }
+
+            userId = $(this).closest('tr').data("id");
+
+            $('#edit_pengguna').modal('show');
+        });
+
+
+
+        function updatePengguna() {
+            var nama = $("#EditNama").val();
+            var hakAkses = $("#EditHakAkses").val();
+
+            var data = {
+                id_pengguna: userId,
+                username: 'string',
+                password: 'string',
+                nama_lengkap: 'string',
+                email: 'string',
+                alamat: 'string',
+                tanggal_lahir: 'string',
+                hak_akses: hakAkses
+            };
+
+            $.ajax({
+                url: rootHost + '   ',
+                method: 'post',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function (data) {
+                    notifikasiUpdateSukses();
+                },
+                error: function () {
+                    // Handle error
+                }
+            });
+        }
+
+        $("#editForm").submit(function (e) {
+            e.preventDefault();
+            updatePengguna();
+        });
+
+        function notifikasiUpdateSukses() {
+            Swal.fire({
+                title: "Sukses!",
+                text: "Data Pengguna berhasil diubah.",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "OK"
+            }).then(() => {
+                location.reload();
+            });
+        }
+
+        $('#edit_pengguna .close').on('click', function () {
+            $('#edit_pengguna').modal('hide');
+        });
+    });
+</script>

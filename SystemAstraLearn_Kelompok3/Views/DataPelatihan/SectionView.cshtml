@@ -1,0 +1,462 @@
+﻿@{
+    ViewData["Title"] = "Pelatih - Pelatihan";
+    Layout = "_LayoutSectionPelatih";
+}
+
+<input type="hidden" id="idPelatihan" value="@ViewBag.idPelatihan" />
+<input type="hidden" id="idSection" value="@ViewBag.idSection" />
+
+<section class="section">
+    <div class="container-fluid" style="background-color: whitesmoke; border-radius: 15px; height: 850px; width: 1300px; margin-left: 30px;">
+        <!-- Video YouTube -->
+        <div class="nama-container">
+            <h1 id="namaSection" class="display-4 mb-4" style="color: #006CBB; font-weight: bold; font-style: italic;"></h1>
+        </div>
+        <div class="video-container">
+            <iframe id="videoContainer" width="100%" height="500" src="" frameborder="0" allowfullscreen style="border-radius: 15px; height: 555px; width: 1100px;"></iframe>
+
+            <div class="desk-container" style="border-radius: 15px; padding-top: 500px;">
+                <p id="deskripsiSection" class="lead mb-4" style="margin-top: 100px; max-width: 1800px; word-wrap: break-word;"></p>
+            </div>
+            <div class="button-container mt-3">
+                <button class="btn btn-primary edit-btn" style="background-color: #066CBB; border-radius: 10px; font-size: 20px;">Ubah</button>
+                <button class="btn btn-danger delete-btn" style="background-color:#BB0000; border-radius: 10px; font-size: 20px;">Hapus</button>
+                <button class="btn btn-danger modul-btn" style="background-color: #004576; border-radius: 10px; font-size: 20px;">Unduh Modul</button>
+                <button class="btn btn-secondary update-href-btn" style="background-color: #062841; border-radius: 10px; font-size: 20px;">Exercise</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="tambah_section" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="color: #464646; font-family: 'Poppins', sans-serif; font-weight: bold; font-size: 30px;">Form Tambah Section</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="myForm">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label class="control-label" for="NamaSection" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Nama Section *</label>
+                            <input id="NamaSection" name="NamaSection" class="form-control" />
+                            <span class="text-danger" id="errorNamaSection"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="DeskripsiSection" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Deskripsi Section *</label>
+                            <input id="DeskripsiSection" name="DeskripsiSection" class="form-control" />
+                            <span class="text-danger" id="errorDeskripsiSection"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="VidioPembelajaran" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Vidio Pembelajaran *</label>
+                            <input id="VidioPembelajaran" name="VidioPembelajaran" class="form-control" />
+                            <span class="text-danger" id="errorVidioPembelajaran"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="ModulPembelajaran" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Modul Pembelajaran *</label>
+                            <input type="file" id="ModulPembelajaran" name="ModulPembelajaran" class="form-control" />
+                            <span class="text-danger" id="errorModulPembelajaran"></span>
+                        </div>
+                        <br>
+                        <div class="form-group text-right">
+                            <input type="submit" value="Tambah" id="buttonCreate" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="edit_section" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="color: #464646; font-family: 'Poppins', sans-serif; font-weight: bold; font-size: 30px;">Form Edit Section</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label class="control-label" for="EditNamaSection" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Nama Section *</label>
+                            <input id="EditNamaSection" name="EditNamaSection" class="form-control" />
+                            <span class="text-danger" id="errorEditNamaSection"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="EditDeskripsiSection" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Deskripsi Section *</label>
+                            <input id="EditDeskripsiSection" name="EditDeskripsiSection" class="form-control" />
+                            <span class="text-danger" id="errorEditDeskripsiSection"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="EditVidioPembelajaran" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Vidio Pembelajaran *</label>
+                            <input id="EditVidioPembelajaran" name="EditVidioPembelajaran" class="form-control" />
+                            <span class="text-danger" id="errorEditVidioPembelajaran"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="EditModulPembelajaran" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Modul Pembelajaran *</label>
+                            <input type="file" id="EditModulPembelajaran" name="EditModulPembelajaran" class="form-control" />
+                            <span class="text-danger" id="errorEditModulPembelajaran"></span>
+                        </div>
+                        <br>
+                        <div class="form-group text-right">
+                            <input type="submit" value="Ubah" id="buttonUpdate" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .video-container {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    }
+
+    .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }    
+
+    .pdf-container {
+        width: 100%;
+        max-width: 800px;
+        margin-top: 20px;
+    }
+
+    /* Additional styles for larger headers and text */
+    h2.display-4 {
+        font-size: 2.5rem; /* Adjust the font size as needed */
+    }
+
+    p.lead {
+        font-size: 1.25rem; /* Adjust the font size as needed */
+    }
+
+    .button-container {
+        margin-bottom: 40px; /* Sesuaikan dengan seberapa besar ruang yang diinginkan */
+    }
+
+    .nama-container {
+        color: dodgerblue;
+        margin-top: 40px;
+        margin-bottom: 40px; /* Sesuaikan dengan seberapa besar ruang yang diinginkan */
+    }
+
+    .desk-container {
+        margin-top: 40px;
+        margin-bottom: 40px; /* Sesuaikan dengan seberapa besar ruang yang diinginkan */
+    }
+
+    .btn-danger {
+        color: #fff; /* Warna teks */
+        background-color: #dc3545; /* Warna latar belakang - merah */
+        border-color: #dc3545; /* Warna border - merah */
+    }
+
+    .btn-primary {
+        color: #fff; /* Warna teks */
+        background-color: #007bff; /* Warna latar belakang - biru */
+        border-color: #007bff; /* Warna border - biru */
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        var rootHost = "http://localhost:7043";
+        var rootWebHost = "https://localhost:7275/SectionView/";
+        var rootWebHost2 = "https://localhost:7275/Exercise/"
+        var IdPelatihan = $("#idPelatihan").val();
+        var IdSection = $("#idSection").val();
+        var NamaSection;
+        var NamaModul;
+        var linkYt = "https://www.youtube.com/embed/";
+        var pdfDirectory = "https://localhost:7157/assets/Upload/";
+
+
+        // ... (your existing code)
+
+        function loadForm() {
+            $.ajax({
+                url: rootHost + '/Section/GetSection?id=' + IdSection,
+                method: 'get',
+                contentType: 'application/json',
+                success: function (response) {
+                    if (response.status === 200) {
+                        var data = response.data;
+
+                        // Update the HTML elements with the received data
+                        $("#namaSection").text(data.nama_section);
+                        $("#videoContainer").attr("src", linkYt + data.video_pembelajaran);
+                        $("#deskripsiSection").text(data.deskripsi);
+                        NamaSection = data.nama_section;
+                        NamaModul = data.modul_pembelajaran;
+                    } else {
+                        console.error("Failed to load section data.");
+                    }
+                },
+                error: function () {
+                    console.error("Failed to load section data.");
+                }
+            });
+        }
+
+        $(document).on("click", ".update-href-btn", function () {
+            var newHref = rootWebHost2 + NamaSection + '/' + IdSection + '/' + IdPelatihan;
+            window.location.href = newHref;
+        });
+
+        $(document).on("click", ".modul-btn", function () {
+            var pdfUrl = pdfDirectory + NamaModul;
+
+            window.open(pdfUrl, '_blank');
+        });
+
+        $("#myForm").submit(function (e) {
+            e.preventDefault();
+
+            var namaSection = $("#NamaSection").val();
+            var deskripsi = $("#DeskripsiSection").val();
+            var vidio = $("#VidioPembelajaran").val();
+            var modul = $("#ModulPembelajaran")[0].files[0];
+
+            if (!namaSection.trim()) {
+                $("#errorNamaSection").text("Nama Section tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorNamaSection").text("");
+            }
+
+            if (!deskripsi.trim()) {
+                $("#errorDeskripsiSection").text("Deskripsi PelatihanSection tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorDeskripsiSection").text("");
+            }
+
+            if (!vidio.trim()) {
+                $("#errorVidioSection").text("Deskripsi PelatihanSection tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorVidioSection").text("");
+            }
+
+            var videoId = extractYouTubeVideoId(vidio);
+
+            if (videoId) {
+                // If it's a valid YouTube URL, set the video ID in the data object
+                vidio = videoId;
+            }
+
+            if (modul) {
+                uploadFile(modul); // Upload the selected file
+            }
+
+            var data = {
+                id_section: 0,
+                id_pelatihan: IdPelatihan,
+                nama_section: namaSection,
+                video_pembelajaran: vidio,
+                modul_pembelajaran: modul ? modul.name : null,
+                deskripsi: deskripsi
+            };
+
+            $.ajax({
+                url: rootHost + '/Section/InsertSection',
+                method: "post",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (data) {
+                    notifikasiTambahSukses();
+                },
+                error: function () {
+                    // Handle error
+                }
+            });
+        });
+
+        $("#editForm").submit(function (e) {
+            e.preventDefault();
+
+            var namaSection = $("#EditNamaSection").val();
+            var deskripsi = $("#EditDeskripsiSection").val();
+            var vidio = $("#EditVidioPembelajaran").val();
+            var modul = $("#EditModulPembelajaran")[0].files[0];
+
+            if (!namaSection.trim()) {
+                $("#errorEditNamaSection").text("Nama Section tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorEditNamaSection").text("");
+            }
+
+            if (!deskripsi.trim()) {
+                $("#errorEditDeskripsiSection").text("Deskripsi PelatihanSection tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorEditDeskripsiSection").text("");
+            }
+
+            if (!vidio.trim()) {
+                $("#errorEditVidioSection").text("Deskripsi PelatihanSection tidak boleh kosong.");
+                return;
+            } else {
+                $("#errorEditVidioSection").text("");
+            }
+
+            var videoId = extractYouTubeVideoId(vidio);
+
+            if (videoId) {
+                vidio = videoId;
+            }
+
+            if (modul) {
+                uploadFile(modul); 
+            }
+
+            var data = {
+                id_section: IdSection, 
+                id_pelatihan: IdPelatihan,
+                nama_section: namaSection,
+                video_pembelajaran: vidio,
+                modul_pembelajaran: modul ? modul.name : null,
+                deskripsi: deskripsi
+            };
+
+            $.ajax({
+                url: rootHost + '/Section/UpdateSection',
+                method: "post",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (data) {
+                    console.log(data);
+                    notifikasiUpdateSukses();
+                },
+                error: function () {
+                    
+                }
+            });
+        });
+
+
+        $(document).on("click", ".delete-btn", function () {
+            Swal.fire({
+                title: "Hapus Section?",
+                text: "Apakah Anda yakin ingin menghapus Section ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya",
+                cancelButtonText: "Tidak"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: rootHost + '/Section/DeleteSection?id=' + IdSection,
+                        type: "POST",
+                        success: function (data) {
+                            notifikasiHapusSukses();
+                        },
+                        error: function () {
+                            Swal.fire("Error!", "Terjadi kesalahan.", "error");
+                        }
+                    });
+                }
+            });
+        });
+
+        $(document).on("click", ".edit-btn", function () {
+            var namaSection = $("#namaSection").text();
+            var deskripsiSection = $("#deskripsiSection").text();
+            var videoPembelajaran = $("#videoContainer").attr("src");
+            var modulPembelajaran = $("#pdfIframe").attr("src");
+
+            $("#EditNamaSection").val(namaSection);
+            $("#EditDeskripsiSection").val(deskripsiSection);
+            $("#EditVidioPembelajaran").val(videoPembelajaran);
+            $('#edit_section').modal('show');
+        });
+
+
+        function extractYouTubeVideoId(url) {
+            var regex = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+
+            var match = url.match(regex);
+
+            return match ? match[1] : null;
+        }
+
+        function uploadFile(file) {
+            var formData = new FormData();
+            formData.append("file", file);
+
+            $.ajax({
+                url: rootHost + '/Section/UploadFile',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    // Handle success, if needed
+                    console.log("File uploaded successfully");
+                },
+                error: function () {
+                    // Handle error, if needed
+                    console.log("Error uploading file");
+                }
+            });
+        }
+
+        function notifikasiHapusSukses() {
+            Swal.fire({
+                title: "Sukses!",
+                text: "Data Section berhasil dihapus.",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "OK"
+            }).then(() => {
+                location.reload();
+            });
+        }
+
+        function notifikasiUpdateSukses() {
+            Swal.fire({
+                title: "Sukses!",
+                text: "Data Klasifikasi Pelatihan berhasil diubah.",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "OK"
+            }).then(() => {
+                location.reload();
+            });
+        }
+
+        function notifikasiTambahSukses() {
+            Swal.fire({
+                title: "Sukses!",
+                text: "Data Pelatihan berhasil ditambahkan.",
+                icon: "success",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "OK"
+            }).then(() => {
+                location.reload();
+            });
+        }
+
+        $('#edit_section .close').on('click', function () {
+            $('#edit_section').modal('hide');
+        });
+
+        loadForm();
+    });
+</script>

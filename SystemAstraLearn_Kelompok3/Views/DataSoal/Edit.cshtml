@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Admin - Data Soal - Edit";
+    Layout = "_Layout";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Edit Data Soal</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" asp-controller="DataPelatihan" asp-action="Edit">
+                            <input type="hidden" />
+                            <div class="form-group">
+                                <label  class="control-label">Klasifikasi Pelatihan</label>
+                                <input  class="form-control" name="judul" />
+                                <span  class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label  class="control-label">Pelatihan</label>
+                                <input  class="form-control" name="penulis" />
+                                <span class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Dibuat Pada</label>
+                                <input class="form-control" name="penulis" />
+                                <span class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Jumlah Soal</label>
+                                <input class="form-control" name="penulis" />
+                                <span class="text-danger"></span>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

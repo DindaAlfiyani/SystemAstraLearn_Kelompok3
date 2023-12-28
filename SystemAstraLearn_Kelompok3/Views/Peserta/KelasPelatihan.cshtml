@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Peserta - Lihat Kelas";
+    Layout = "_LayoutSection";
+}
+
+<!-- ======= Breadcrumbs ======= -->
+<section id="breadcrumbs" class="breadcrumbs">
+    <div class="container">
+        <div class="d-flex justify-content-center py-4">
+            <div class="section-title">
+                <span><h1>Bahasa C</h1></span>
+            </div>
+        </div><!-- End Logo -->
+
+
+    </div>
+</section><!-- End Breadcrumbs -->
+
+        <section class="section">
+    <div class="container">
+
+        <div class="row gy-4">
+            <video controls="true" width="150px" muted poster="~/assets1/img/news-4.jpg">
+                <source src="~/assets1/video/contoh.mp4" type="video/webm">
+            </video>
+        </div>
+        <div class="section-title">
+            <h2>Tentang Kursus</h2>
+            <p>
+                Pada kursus ini, kamu akan belajar tentang apa itu virtual machine, dan bagaimana kita bisa memanfaatkan virtual machine.
+
+                Pelajaran ini sangat penting untuk kamu kuasai sebelum belajar tentang System Administrator. Bahkan untuk saat ini, server-server di dunia itu hampir semuanya berbentuk virtual machine.
+
+                Yuk join kursus ini untuk belajar lebih dalam lagi tentang apa itu virtual machine
+            </p>
+        </div>
+        <form asp-controller="Peserta" asp-action="Exam" method="post">
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Mulai Exam</button>
+            </div>
+        </form>
+    </div>
+        </section>

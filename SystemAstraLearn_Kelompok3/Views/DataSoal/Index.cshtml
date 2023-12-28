@@ -1,0 +1,146 @@
+﻿@{
+    ViewData["Title"] = "Pelatih - Data Soal";
+    Layout = "_Layout";
+}
+
+        <div class="pagetitle">
+            <h1>Data Soal</h1>
+        </div><!-- End Page Title -->
+
+        <section class="section">
+            <div class="row">
+                <!--untuk lebar card-->
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <hr />
+
+                            <!-- Table with stripped rows -->
+                            <table class="table datatable">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Klasifikasi Pelatihan</th>
+                                        <th scope="col">Pelatihan</th>
+                                        <th scope="col">Dibuat Pada</th>
+                                        <th scope="col">Jumlah Soal</th>
+                                        <th scope="col">Aksi</th>
+                                    </tr>
+                                </thead>
+                        <tbody>
+                            <tr data-id="1">
+                                <!-- Add data-id attribute to store anggotaId -->
+                                <td>1</td>
+                                <td>Teknik Informatika</td>
+                                <td>Bahasa c</td>
+                                <td>29 November 2023</td>
+                                <td>50</td>
+                                <td>
+                                    <a asp-controller="DataSoal" asp-action="Edit" class="btn btn-primary btn-sm"><i class="bi bi-exclamation-triangle"></i></a>
+                                </td>
+                            </tr>
+                            <!-- Add more rows as needed -->
+                        </tbody>
+                            </table>
+                            <!-- End Table with stripped rows -->
+                            @if (TempData["SuccesMessage"] != null)
+                            {
+                                <div class="row">
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <i class="bi bi-check-circle me-1"></i>
+                                        <strong>Sukses!</strong>@TempData["SuccessMessage"]
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="modal fade" id="updModalFile" tabindex="-1" role="dialog" aria-labelledby="updModalFileLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-md" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="updModalFileLabel">Pengumpulan Tugas</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p style="font-size: 12px;">
+                                                Berkas harus berformat .jpg, .png, .zip, .rar, .pdf, .docx, .pptx, .xlsx, atau .txt dengan ukuran berkas maksimal 5MB.
+                                            </p>
+                                            <input type="file" name="ctl00$MainContent$tugasUpload" id="tugasUpload" class="form-control" onchange="if (!window.__cfRLUnblockHandlers) return false; valBerkas(this, &#39;materi&#39;);" data-cf-modified-dbdcc75093db955e883bb913-="" />
+                                            <br />
+                                            <p style="font-size: 12px; color: red;">Berkas yang akan di terima adalah berkas yang diunggah terakhir. Jika ada beberapa berkas yang di unggah, pastikan untuk dijadikan format .zip . </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input name="ctl00$MainContent$txtConfrimtkm" type="text" id="txtConfrimtkm" class="hidden-xs-up" />
+                                            <input name="ctl00$MainContent$txtConfrimRde" type="text" id="txtConfrimRde" class="hidden-xs-up" />
+                                            <input name="ctl00$MainContent$txtConfrimJenisTugas" type="text" id="txtConfrimJenisTugas" class="hidden-xs-up" />
+                                            <input name="ctl00$MainContent$txtConfrimTugas" type="text" id="txtConfrimTugas" class="hidden-xs-up" />
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                            <a id="MainContent_LinkUploadTugas" class="btn btn-primary" href="javascript:__doPostBack(&#39;ctl00$MainContent$LinkUploadTugas&#39;,&#39;&#39;)">Konfirmasi</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <script>
+                                // Tunggu hingga DOM siap
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    // Pilih tombol berdasarkan id
+                                    var btnTambahAnggota = document.getElementById("btnTambahAnggota");
+
+                                    // Tambahkan event listener klik pada tombol
+                                    btnTambahAnggota.addEventListener("click", function () {
+                                        // Tampilkan modal
+                                        $('#updModalFile').modal('show');
+                                    });
+                                });
+                            </script>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        $(".delete-button").click(function () {
+            var soalId = $(this).data("id");
+
+            Swal.fire({
+                title: "Hapus Buku?",
+                text: "Apakah anda ingin menghapus Soal ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya",
+                cancelButtonText: "Tidak"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Mengirimkan permintaan menghapus ke kontrol
+                    $.ajax({
+                        url: "/Soal/Delete/" + soalId,
+                        type: "POST",
+                        success: function (data) {
+                            // Tampilkan pesan sukses jika diperlukan
+                            if (data.success) {
+                                Swal.fire("Sukses!", data.message, "success");
+                                // Refresh halaman setelah menghapus
+                                location.reload();
+                            } else {
+                                Swal.fire("Gagal!", data.message, "error");
+                            }
+                        },
+                        error: function () {
+                            Swal.fire("Error!", "Terjadi kesalahan.", "error");
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+
+

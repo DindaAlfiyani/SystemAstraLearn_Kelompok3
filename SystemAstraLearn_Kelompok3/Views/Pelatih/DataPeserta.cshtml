@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Admin - Pelatihan";
+    Layout = "_Layout";
+}
+
+<div class="pagetitle">
+    <h1>Data Peserta</h1>
+</div><!-- End Page Title -->
+
+<section class="section">
+    <div class="container-fluid">
+        <!-- Table with stripped rows -->
+        <div class="table-responsive">
+            <table class="table table-striped" style="width:100%" id="dataTable">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Nama Pengguna</th>
+                        <th scope="col">Nama Pelatihan</th>
+                        <th scope="col">Riwayat Section</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Presentase</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<style>
+    .section {
+        min-height: 78vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container-fluid {
+        flex: 1;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var rootHost = "http://localhost:7043";
+
+        new DataTable('#dataTable', {
+            ajax: {
+                url: rootHost + '/ViewPeserta/GetAllPeserta',
+                type: "GET",
+                dataSrc: function (data) {
+                    console.log(data.data);
+                    return data.data;
+                }
+            },
+            columns: [
+                { data: null },
+                { data: 'nama_pengguna' },
+                { data: 'nama_pelatihan' },
+                { data: 'riwayat_section' },
+                { data: 'status' },
+                { data: 'presentase' },
+            ],
+            columnDefs: [
+                {
+                    targets: 0,
+                    render: function (data, type, row, index) {
+                        return index.row + 1;
+                    }
+                }
+            ],
+            createdRow: function (row, data, dataIndex) {
+                // Add any additional row attributes if needed
+            }
+        });
+    });
+</script>
