@@ -108,7 +108,7 @@
 </style>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var rootHost = "http://localhost:7043";
+        var rootHost = "http://localhost:5114";
         var klasifikasiId;
 
         new DataTable('#dataTable', {
@@ -116,8 +116,8 @@
                 url: rootHost + '/KlasifikasiPelatihan/GetAllKlasifikasiPelatihan',
                 type: "GET",
                 dataSrc: function (data) {
-                    console.log(data.data)
-                    return data.data; 
+                    console.log(data.data);
+                    return data.data;
                 }
             },
             columns: [
