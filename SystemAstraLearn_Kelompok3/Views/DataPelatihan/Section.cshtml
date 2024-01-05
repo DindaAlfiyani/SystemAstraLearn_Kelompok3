@@ -99,8 +99,16 @@
 
             var namaSection = $("#NamaSection").val();
             var deskripsi = $("#DeskripsiSection").val();
-            var vidio = $("#VidioPembelajaran").val();
+            var videoFile = $("#VideoPembelajaran")[0].files[0];
             var modul = $("#ModulPembelajaran")[0].files[0];
+
+            // Validasi ukuran file video (maksimum: 500MB)
+            if (videoFile && videoFile.size > 500 * 1024 * 1024) {
+                $("#errorVideoPembelajaran").text("Ukuran file melebihi batas maksimum 500MB.");
+                return;
+            } else {
+                $("#errorVideoPembelajaran").text("");
+            }
 
             // Validasi form
             if (!namaSection.trim()) {
@@ -117,19 +125,6 @@
                 $("#errorDeskripsiSection").text("");
             }
 
-            if (!vidio.trim()) {
-                $("#errorVidioSection").text("Vidio PelatihanSection tidak boleh kosong.");
-                return;
-            } else {
-                $("#errorVidioSection").text("");
-            }
-
-            // Ekstrak ID video YouTube jika ada
-            var videoId = extractYouTubeVideoId(vidio);
-            if (videoId) {
-                vidio = videoId;
-            }
-
             // Upload berkas modul jika ada
             if (modul) {
                 uploadFile(modul);
@@ -140,7 +135,7 @@
                 id_section: 0,
                 id_pelatihan: IdPelatihan,
                 nama_section: namaSection,
-                video_pembelajaran: vidio,
+                video_pembelajaran: "", // Ubah ke string kosong jika tidak ada videoId
                 modul_pembelajaran: modul ? modul.name : null,
                 deskripsi: deskripsi
             };
@@ -155,17 +150,10 @@
                     notifikasiTambahSukses();
                 },
                 error: function () {
-                    // Handle error
+                    // Tangani kesalahan
                 }
             });
         });
-
-        // Fungsi ekstrak ID video YouTube
-        function extractYouTubeVideoId(url) {
-            var regex = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-            var match = url.match(regex);
-            return match ? match[1] : null;
-        }
 
         // Fungsi upload berkas
         function uploadFile(file) {
@@ -202,6 +190,6 @@
             });
         }
     });
-
 </script>
+
 
