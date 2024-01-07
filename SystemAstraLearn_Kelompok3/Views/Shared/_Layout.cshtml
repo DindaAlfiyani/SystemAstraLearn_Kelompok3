@@ -82,21 +82,21 @@
     <header id="header" class="header fixed-top d-flex align-items-center">
 
         <div class="d-flex align-items-center justify-content-between">
-            @if (@Context.Session.GetString("Peran") == "Pelatih")
+            @if (@Context.Session.GetString("Peran") == "pelatih")
             {
                 <a class="nav-link collapsed logo d-flex align-items-center" asp-controller="Pelatih" asp-action="Index">
                     <img src="~/assets/img/Logo_AstraLearn.png" alt="">
                 </a>
             }
 
-            @if (@Context.Session.GetString("Peran") == "Admin")
+            @if (@Context.Session.GetString("Peran") == "admin")
             {
                 <a class="nav-link collapsed logo d-flex align-items-center" asp-controller="Admin" asp-action="Index">
                     <img src="~/assets/img/Logo_AstraLearn.png" alt="">
                 </a>
             }
 
-            @if (@Context.Session.GetString("Peran") == "Peserta")
+            @if (@Context.Session.GetString("Peran") == "peserta")
             {
                 <a class="nav-link collapsed logo d-flex align-items-center" asp-controller="Peserta" asp-action="Dashboard">
                     <img src="~/assets/img/Logo_AstraLearn.png" alt="">
@@ -186,7 +186,7 @@
     <aside id="sidebar" class="sidebar">
 
         <ul class="sidebar-nav active" id="sidebar-nav">
-            @if (@Context.Session.GetString("Peran") == "Pelatih")
+            @if (@Context.Session.GetString("Peran") == "pelatih")
             {
                 <li class="nav-item" style="background-color: #EFF7FB;">
                     <a class="nav-link collapsed" asp-controller="Pelatih" asp-action="Index" style="background-color: #EFF7FB;">
@@ -218,7 +218,7 @@
 
             }
 
-            @if (@Context.Session.GetString("Peran") == "Admin")
+            @if (@Context.Session.GetString("Peran") == "admin")
             {
                 <li class="nav-item">
                     <a class="nav-link collapsed" asp-controller="Admin" asp-action="Index" style="background-color: #EFF7FB;">
@@ -265,7 +265,7 @@
                 <!-- End Dashboard Nav -->
             }
 
-            @if (@Context.Session.GetString("Peran") == "Peserta")
+            @if (@Context.Session.GetString("Peran") == "peserta")
             {
                 <li class="nav-item">
                     <a class="nav-link collapsed" asp-controller="Peserta" asp-action="Dashboard" style="background-color: #EFF7FB;">

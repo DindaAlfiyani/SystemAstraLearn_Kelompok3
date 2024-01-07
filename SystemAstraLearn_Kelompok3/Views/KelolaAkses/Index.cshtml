@@ -125,7 +125,7 @@
             $("#EditNama").val(nama);
 
             $("#EditHakAkses").empty();
-            var options = ["Peserta", "Pelatih", "Admin"];
+            var options = ["peserta", "pelatih", "admin"];
             for (var i = 0; i < options.length; i++) {
                 var option = $('<option>', {
                     value: options[i],
@@ -155,13 +155,13 @@
                 password: 'string',
                 nama_lengkap: 'string',
                 email: 'string',
-                alamat: 'string',
                 tanggal_lahir: 'string',
+                alamat: 'string',
                 hak_akses: hakAkses
             };
 
             $.ajax({
-                url: rootHost + '   ',
+                url: rootHost + '/Pengguna/UpdateHakAkses',
                 method: 'post',
                 data: JSON.stringify(data),
                 contentType: 'application/json',

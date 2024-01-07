@@ -31,7 +31,7 @@ namespace SystemAstraLearn_Kelompok3.Controllers
                 HttpContext.Session.SetString("IsLoggedIn", "true");
                 HttpContext.Session.SetString("loggedInUserId", "true");
 
-                if (user.HakAkses == "Peserta")
+                if (user.HakAkses == "peserta")
                 {
                     // Set success alert for successful login
                     TempData["LoginSuccessMessage"] = "Login successful. Welcome, " + user.Username + "!";
@@ -39,7 +39,7 @@ namespace SystemAstraLearn_Kelompok3.Controllers
 
                     return RedirectToAction("Dashboard", "Peserta");
                 }
-                else if (user.HakAkses == "Admin")
+                else if (user.HakAkses == "admin")
                 {
                     // Set success alert for successful login
                     TempData["LoginSuccessMessage"] = "Login successful. Welcome, " + user.Username + "!";
@@ -47,7 +47,7 @@ namespace SystemAstraLearn_Kelompok3.Controllers
 
                     return RedirectToAction("Index", "Admin");
                 }
-                else if (user.HakAkses == "Pelatih")
+                else if (user.HakAkses == "pelatih")
                 {
                     // Set success alert for successful login
                     TempData["LoginSuccessMessage"] = "Login successful. Welcome, " + user.Username + "!";
