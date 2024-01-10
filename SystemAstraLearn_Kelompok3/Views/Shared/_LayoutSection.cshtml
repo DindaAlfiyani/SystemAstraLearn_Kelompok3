@@ -79,27 +79,27 @@
 
 <body>
 
-    @if (Context.Session.GetString("Peran") == "Pelatih" || Context.Session.GetString("Peran") == "Peserta" || Context.Session.GetString("Peran") == "Admin")
+    @if (Context.Session.GetString("Peran") == "pelatih" || Context.Session.GetString("Peran") == "peserta" || Context.Session.GetString("Peran") == "admin")
     {
         <!-- ======= Header ======= -->
         <header id="header" class="header fixed-top d-flex align-items-center">
 
             <div class="d-flex align-items-center justify-content-between">
-                @if (@Context.Session.GetString("Peran") == "Pelatih")
+                @if (@Context.Session.GetString("Peran") == "pelatih")
                 {
                     <a class="nav-link collapsed logo d-flex align-items-center" asp-controller="Pelatih" asp-action="Index">
                         <img src="~/assets/img/Logo_AstraLearn.png" alt="">
                     </a>
                 }
 
-                @if (@Context.Session.GetString("Peran") == "Admin")
+                @if (@Context.Session.GetString("Peran") == "admin")
                 {
                     <a class="nav-link collapsed logo d-flex align-items-center" asp-controller="Admin" asp-action="Index">
                         <img src="~/assets/img/Logo_AstraLearn.png" alt="">
                     </a>
                 }
 
-                @if (@Context.Session.GetString("Peran") == "Peserta")
+                @if (@Context.Session.GetString("Peran") == "peserta")
                 {
                     <a class="nav-link collapsed logo d-flex align-items-center" asp-controller="Peserta" asp-action="Index">
                         <img src="~/assets/img/Logo_AstraLearn.png" alt="">

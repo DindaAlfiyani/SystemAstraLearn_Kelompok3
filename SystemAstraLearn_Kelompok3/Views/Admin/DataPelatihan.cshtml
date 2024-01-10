@@ -18,8 +18,6 @@
                         <th scope="col">Nama Pelatih</th>
                         <th scope="col">Nama Klasifikasi</th>
                         <th scope="col">Deskripsi</th>
-                        <th scope="col">Jumlah Peserta</th>
-                        <th scope="col">Jumlah Peserta Selesai</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,7 +46,7 @@
 
         new DataTable('#dataTable', {
             ajax: {
-                url: rootHost + '/ViewPelatihan/GetAllPelatihans',
+                url: rootHost + '/Pelatihan/GetAllPelatihan',
                 type: "GET",
                 dataSrc: function (data) {
                     console.log(data.data)
@@ -57,11 +55,9 @@
             },
             columns: [
                 { data: null },
-                { data: 'nama_pengguna' },
-                { data: 'nama_klasifikasi' },
+                { data: 'id_pengguna' },
+                { data: 'id_klasifikasi' },
                 { data: 'deskripsi_pelatihan' },
-                { data: 'jumlah_peserta' },
-                { data: 'jumlah_peserta_selesai' },
             ],
             columnDefs: [
                 {

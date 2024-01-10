@@ -11,7 +11,7 @@
     <div class="container-fluid">
         <button class="btn btn-sm btn-primary mb-3" data-toggle="modal" data-target="#tambah_klasifikasi" style="background-color: #066CBB; color:seashell; border-radius: 7px; font-size: 20px;">
             <i class="fas fa-plus fa-sm"></i> Tambah Pelatihan
-            </button>
+        </button>
         <!-- Table with stripped rows -->
         <div class="table-responsive">
             <table class="table table-striped" style="width:100%" id="dataTable">
@@ -125,8 +125,9 @@
         var rootHost = "http://localhost:5114";
         var rootWebHost = "https://localhost:7275/Section/";
         var rootWebHost2 = "https://localhost:7275/Exam/";
-        var IdLogin = $("#idLogin").val();
-        
+        //var IdLogin = $("#idLogin").val();
+
+
         var pelatihanId;
 
         loadKlasifikasi();
@@ -134,9 +135,10 @@
         function loadKlasifikasi() {
             $.ajax({
                 url: rootHost + '/KlasifikasiPelatihan/GetAllKlasifikasiPelatihan',
-                method: 'get',
+                method: 'GET',
                 contentType: 'application/json',
                 success: function (response) {
+                    console.log(response)
                     if (response.status === 200 && response.data) {
                         var klasifikasiData = response.data;
 
@@ -165,9 +167,11 @@
 
         new DataTable('#dataTable', {
             ajax: {
-                url: rootHost + '/Pelatihan/GetPelatihan2?id=' + IdLogin,
-                type: "GET",
+                url: rootHost + '/Pelatihan/GetAllPelatihan',
+                method: "GET",
+                contentType: "application/json",
                 dataSrc: function (data) {
+                    console.log(data.data)
                     return data.data;
                 }
             },
@@ -191,9 +195,9 @@
                     targets: 6,
                     render: function (data, type, row, index) {
                         const deleteButton = '<button class="btn btn-sm btn-danger delete-button" style="background-color:#BB0000"><i class="bi bi-trash"></i></button>';
-                        const editButton = '<button class="btn btn-primary btn-sm edit-button" data-toggle="modal" data-target="#edit_pelatihan" data-id="' + row.id_pelatihan + '" style="background-color: #066CBB; border-radius: 5px;"><i class="bi bi-exclamation-triangle"></i></button>';
-                        const updateHrefButton = '<button class="btn btn-primary btn-sm update-href-button" data-id="' + row.id_pelatihan + '" style="background-color: #004576; border-radius: 5px;">Section</button>';
-                        const updateHrefButton2 = '<button class="btn btn-primary btn-sm update-href-button2" data-id="' + row.id_pelatihan + '" style="background-color: #062841; border-radius: 5px;"> Exam</button>';
+                        const editButton = '<button class="btn btn-primary btn-sm edit-button" data-toggle="modal" data-target="#edit_pelatihan" data-id="' + row.id_pelatihan + '" style="background-color: #066CBB"><i class="bi bi-exclamation-triangle"></i></button>';
+                        const updateHrefButton = '<button class="btn btn-primary btn-sm update-href-button" data-id="' + row.id_pelatihan + '" style="background-color: #004576">Section</button>';
+                        const updateHrefButton2 = '<button class="btn btn-primary btn-sm update-href-button2" data-id="' + row.id_pelatihan + '" style="background-color: #062841"> Exam</button>';
                         return editButton + " " + deleteButton + " " + updateHrefButton + " " + updateHrefButton2;
                     }
                 },
@@ -203,6 +207,7 @@
                 $(row).attr('data-type', 'pelatihan');
             }
         });
+
 
         $('#dataTable').on('click', 'button.update-href-button', function () {
             var namaPelatihan = $(this).closest('tr').find('td:eq(1)').text(); // Assuming nama_pelatihan is in the second column
@@ -249,14 +254,17 @@
                 id_pelatihan: 0,
                 id_pengguna: IdLogin,
                 id_klasifikasi: klasifikasiPelatihan,
+                id_sertifikat: 0,
                 nama_pelatihan: namaPelatihan,
+                tanggal_mulai: null,
+                tanggal_selesai: null,
                 deskripsi_pelatihan: deskripsiPelatihan,
                 jumlah_pelatihan: 0,
                 nama_klasifikasi: namaPelatihan,
-                nilai: 0
+                nilai: 0,
+                status: 1
             };
 
-            console.log(data);
 
             $.ajax({
                 url: rootHost + '/Pelatihan/InsertPelatihan',
@@ -462,3 +470,4 @@
         });
     });
 </script>
+
