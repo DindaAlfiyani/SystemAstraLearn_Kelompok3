@@ -1,7 +1,6 @@
 ﻿using SystemAstraLearn_Kelompok3.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using SystemAstraLearn_Kelompok3.Models;
 using System.Diagnostics;
 
 namespace SystemAstraLearn_Kelompok3.Controllers
@@ -15,9 +14,10 @@ namespace SystemAstraLearn_Kelompok3.Controllers
             _userRepository = new UserRepository(configuration);
         }
 
-        public IActionResult Login(string username, string password)
+        [Route("Login/{username}")]
+        public IActionResult Login(string username)
         {
-            User user = _userRepository.getDataByUsername_Password(username, password);
+            User user = _userRepository.getDataByUsername_Password(username);
 
             if (user.IdPengguna != 0)
             {

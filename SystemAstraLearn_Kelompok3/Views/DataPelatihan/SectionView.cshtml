@@ -93,7 +93,7 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="EditVidioPembelajaran" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Vidio Pembelajaran *</label>
-                            <input id="EditVidioPembelajaran" name="EditVidioPembelajaran" class="form-control" />
+                            <input type="file" id="EditVidioPembelajaran" name="EditVidioPembelajaran" class="form-control" />
                             <span class="text-danger" id="errorEditVidioPembelajaran"></span>
                         </div>
                         <div class="form-group">
@@ -180,8 +180,8 @@
         var IdSection = $("#idSection").val();
         var NamaSection;
         var NamaModul;
-        var linkYt = "https://www.youtube.com/embed/";
-        var pdfDirectory = "https://localhost:7157/assets/Upload/";
+        var video = "https://localhost:7275/assets/Upload/";
+        var pdfDirectory = "https://localhost:7275/assets/Upload/";
 
 
         // ... (your existing code)
@@ -197,7 +197,7 @@
 
                         // Update the HTML elements with the received data
                         $("#namaSection").text(data.nama_section);
-                        $("#videoContainer").attr("src", linkYt + data.video_pembelajaran);
+                        $("#videoContainer").attr("src", video + data.video_pembelajaran);
                         $("#deskripsiSection").text(data.deskripsi);
                         NamaSection = data.nama_section;
                         NamaModul = data.modul_pembelajaran;
@@ -251,11 +251,8 @@
                 $("#errorVidioSection").text("");
             }
 
-            var videoId = extractYouTubeVideoId(vidio);
-
-            if (videoId) {
-                // If it's a valid YouTube URL, set the video ID in the data object
-                vidio = videoId;
+            if (vidio) {
+                uploadFile(vidio); // Upload the selected file
             }
 
             if (modul) {
@@ -266,7 +263,7 @@
                 id_section: 0,
                 id_pelatihan: IdPelatihan,
                 nama_section: namaSection,
-                video_pembelajaran: vidio,
+                video_pembelajaran: video ? video.name : null,
                 modul_pembelajaran: modul ? modul.name : null,
                 deskripsi: deskripsi
             };

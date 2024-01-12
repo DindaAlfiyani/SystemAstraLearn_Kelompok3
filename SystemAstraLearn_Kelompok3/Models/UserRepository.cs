@@ -21,15 +21,14 @@ namespace SystemAstraLearn_Kelompok3.Models
             _connection = new SqlConnection(_connectingString);
         }
 
-        public User getDataByUsername_Password(string username, string password)
+        public User getDataByUsername_Password(string username)
         {
             User user = new User();
             try
             {
-                string query = "SELECT * FROM tb_pengguna WHERE username = @p1 AND password = @p2";
+                string query = "SELECT * FROM tb_pengguna WHERE username = @p1";
                 SqlCommand command = new SqlCommand(query, _connection);
                 command.Parameters.AddWithValue("@p1", username);
-                command.Parameters.AddWithValue("@p2", password);
                 _connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
 
@@ -38,10 +37,6 @@ namespace SystemAstraLearn_Kelompok3.Models
                     user.IdPengguna = Convert.ToInt32(reader["id_pengguna"].ToString());
                     user.NamaLengkap = reader["nama_lengkap"].ToString();
                     user.Username = reader["username"].ToString();
-                    user.Password = reader["password"].ToString();
-                    user.Email = reader["email"].ToString();
-                    user.Alamat = reader["alamat"].ToString();
-                    user.TanggalLahir = reader["tanggal_lahir"].ToString();
                     user.HakAkses = reader["hak_akses"].ToString();
                 }
                 else

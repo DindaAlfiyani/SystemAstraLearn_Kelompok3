@@ -125,7 +125,7 @@
         var rootHost = "http://localhost:5114";
         var rootWebHost = "https://localhost:7275/Section/";
         var rootWebHost2 = "https://localhost:7275/Exam/";
-        //var IdLogin = $("#idLogin").val();
+        var IdLogin = $("#idLogin").val();
 
 
         var pelatihanId;
@@ -259,23 +259,24 @@
                 tanggal_mulai: null,
                 tanggal_selesai: null,
                 deskripsi_pelatihan: deskripsiPelatihan,
-                jumlah_pelatihan: 0,
+                jumlah_peserta: 0,
                 nama_klasifikasi: namaPelatihan,
                 nilai: 0,
                 status: 1
             };
 
-
+            console.log(data);
             $.ajax({
                 url: rootHost + '/Pelatihan/InsertPelatihan',
                 method: "post",
                 data: JSON.stringify(data),
                 contentType: "application/json",
-                success: function (data) {
+                success: function (a) {
+                    console.log(data);
                     notifikasiTambahSukses();
                 },
                 error: function () {
-
+                    // Handle error
                 }
             });
         }

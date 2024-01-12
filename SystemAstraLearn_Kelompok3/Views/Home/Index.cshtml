@@ -101,7 +101,7 @@
                                         </div>
                                     </div><!-- End Logo -->
                                     <!-- Sign In Form -->
-                                    <form class="row g-3 needs-validation" method="post" asp-action="Login" asp-controller="Home" onsubmit="return handleLogin()" data-error="@TempData["ErrorLogin"]">
+                                    <form class="row g-3 needs-validation" onsubmit="return Login()" data-error="@TempData["ErrorLogin"]">
                                         <div class="form-floating mb-3">
                                             <input type="text" name="username" class="form-control" id="yourUsername" placeholder="Username" style="border-radius: 15px;" required>
                                             <label for="yourUsername" style="color:darkgray;">Nama Pengguna</label>
@@ -111,10 +111,8 @@
                                             <label for="yourPassword" style="color:darkgray;">Kata Sandi</label>
                                         </div>
 
-                                        <input type="hidden" name="isLoggedIn" id="isLoggedIn" value="false">
-
                                         <div class="d-grid">
-                                            <button class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2" type="submit" style="background-color: #006CBB; border-radius: 15px;">Masuk</button>
+                                            <button class="btn btn-lg btn-primary btn-login text-uppercase fw-bold mb-2" onclick="Login()" style="background-color: #006CBB; border-radius: 15px;">Masuk</button>
                                         </div>
 
                                     </form>
@@ -127,6 +125,7 @@
         </div>
 
     </main1><!-- End #main -->
+
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
@@ -147,36 +146,84 @@
     <!-- Include SweetAlert for displaying alerts -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-    @*  <!-- Add this code snippet to display the alerts -->
-    @if (TempData["LoginSuccessMessage"] != null)
-    {
     <script>
-    $(document).ready(function () {
-    Swal.fire({
-    title: '@TempData["LoginSuccessType"]',
-    text: '@TempData["LoginSuccessMessage"]',
-    icon: '@TempData["LoginSuccessType"]',
-    confirmButtonText: 'OK'
-    });
-    });
-    </script>
-    }*@
+        function Login(hak_akses) {
+            var username = $('#yourUsername').val();
+            var password = $('#yourPassword').val();
 
-    <!-- Display the error alert for login -->
-    @if (TempData["AlertMessage"] != null)
-    {
-        <script>
-            $(document).ready(function () {
-                Swal.fire({
-                    title: 'Error',
-                    text: '@TempData["AlertMessage"]',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
+            $.ajax({
+                url: "https://api.polytechnic.astra.ac.id:2906/api_dev/efcc359990d14328fda74beb65088ef9660ca17e/SIA/LoginSIA?" +
+                    "username=" + username + "&password=" + password,
+                method: 'post',
+                contentType: 'application/json',
+                success: function (response) {
+                    console.log(response);
+                    // Check if login is successful
+                    if (response.npk !== "") {
+                        DataAda(response, hak_akses);
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal Login',
+                            text: 'Nama Pengguna atau Kata Sandi Salah!',
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Login Error',
+                        text: 'Tolong masukkan nama pengguna dan kata sandi.',
+                    });
+                }
             });
-        </script>
-    }
+            return false;
+        }
 
+        function DataAda(response1, hak_akses) {
+            $.ajax({
+                url: "http://localhost:5114/Pengguna/GetPenggunaUsername?username=" + response1.username,
+                method: 'get',
+                contentType: 'application/json',
+                success: function (response) {
+                    console.log(response);
+                    if (response.data.username === null) {
+                        // Jika pengguna tidak ditemukan, panggil fungsi insert dengan menyertakan hak akses dari parameter
+                        insert(response1, hak_akses);
+                    } else {
+                        var redirectUrl = "https://localhost:7275/Login/" + response1.username;
+                        window.location.href = redirectUrl;
+                    }
+                }
+            });
+            // Prevent default form submission
+            return false;
+        }
+
+
+        function insert(response) {
+            var data = {
+                id_pengguna: 0,
+                username: response.username,
+                nama_lengkap: response.nama,
+                hak_akses: "peserta",
+            };
+
+            $.ajax({
+                url: "http://localhost:5114/Pengguna/InsertPengguna",
+                method: "post",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (data) {
+                    console.log("success");
+                },
+                error: function () {
+                    console.error("Error inserting data");
+                }
+            });
+        }
+
+    </script>
 
 </body>
 

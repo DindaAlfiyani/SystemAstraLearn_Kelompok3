@@ -102,13 +102,6 @@
             var videoFile = $("#VideoPembelajaran")[0].files[0];
             var modul = $("#ModulPembelajaran")[0].files[0];
 
-            // Validasi ukuran file video (maksimum: 500MB)
-            if (videoFile && videoFile.size > 500 * 1024 * 1024) {
-                $("#errorVideoPembelajaran").text("Ukuran file melebihi batas maksimum 500MB.");
-                return;
-            } else {
-                $("#errorVideoPembelajaran").text("");
-            }
 
             // Validasi form
             if (!namaSection.trim()) {
@@ -130,14 +123,19 @@
                 uploadFile(modul);
             }
 
+            if (videoFile) {
+                uploadFile(videoFile);
+            }
+
             // Persiapkan data untuk dikirim ke server
             var data = {
                 id_section: 0,
                 id_pelatihan: IdPelatihan,
                 nama_section: namaSection,
-                video_pembelajaran: "", // Ubah ke string kosong jika tidak ada videoId
+                video_pembelajaran: videoFile ? videoFile.name : null, // Ubah ke string kosong jika tidak ada videoId
                 modul_pembelajaran: modul ? modul.name : null,
-                deskripsi: deskripsi
+                deskripsi: deskripsi,
+                status : status
             };
 
             // Kirim data ke server menggunakan AJAX
