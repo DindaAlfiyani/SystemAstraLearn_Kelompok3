@@ -151,7 +151,7 @@
             window.location.href = newHref;
         });
 
-        function loadVidio() {
+        function loadVideo() {
             console.log('b');
             var video = document.getElementById('videoContainer');
             console.log('a');
@@ -164,21 +164,21 @@
             }
         }
 
-        function tryLoadVidio() {
+        function tryLoadVideo() {
             var video = document.getElementById('videoContainer');
             if (video && video.readyState >= 2) {
-                loadVidio();
+                loadVideo();
             } else {
                 // Jika video belum sepenuhnya dimuat, tunggu hingga dimuat sebelum mencoba lagi
                 video.addEventListener('loadeddata', function () {
-                    tryLoadVidio();
+                    tryLoadVideo();
                 });
             }
         }
 
         function loadDataEverySecond() {
-            tryLoadVidio(); // Panggil pertama kali saat halaman dimuat
-            setInterval(tryLoadVidio, 1000); // Set interval untuk memanggil tryLoadVidio setiap 1000 milliseconds (1 detik)
+            tryLoadVideo(); // Panggil pertama kali saat halaman dimuat
+            setInterval(tryLoadVideo, 1000); // Set interval untuk memanggil tryLoadVideo setiap 1000 milliseconds (1 detik)
         }
 
         function loadRiwayat() {

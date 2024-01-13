@@ -50,9 +50,9 @@
                             <span class="text-danger" id="errorDeskripsiSection"></span>
                         </div>
                         <div class="form-group">
-                            <label class="control-label" for="VidioPembelajaran" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Vidio Pembelajaran *</label>
-                            <input id="VidioPembelajaran" name="VidioPembelajaran" class="form-control" />
-                            <span class="text-danger" id="errorVidioPembelajaran"></span>
+                            <label class="control-label" for="VideoPembelajaran" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Video Pembelajaran *</label>
+                            <input type="file" id="VideoPembelajaran" name="VideoPembelajaran" class="form-control" />
+                            <span class="text-danger" id="errorVideoPembelajaran"></span>
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="ModulPembelajaran" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Modul Pembelajaran *</label>
@@ -92,9 +92,9 @@
                             <span class="text-danger" id="errorEditDeskripsiSection"></span>
                         </div>
                         <div class="form-group">
-                            <label class="control-label" for="EditVidioPembelajaran" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Vidio Pembelajaran *</label>
-                            <input type="file" id="EditVidioPembelajaran" name="EditVidioPembelajaran" class="form-control" />
-                            <span class="text-danger" id="errorEditVidioPembelajaran"></span>
+                            <label class="control-label" for="EditVideoPembelajaran" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Video Pembelajaran *</label>
+                            <input type="file" id="EditVideoPembelajaran" name="EditVideoPembelajaran" class="form-control" />
+                            <span class="text-danger" id="errorEditVideoPembelajaran"></span>
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="EditModulPembelajaran" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Modul Pembelajaran *</label>
@@ -180,11 +180,9 @@
         var IdSection = $("#idSection").val();
         var NamaSection;
         var NamaModul;
-        var video = "https://localhost:7275/assets/Upload/";
+        var video = "https://localhost:7275/assets/Video/";
         var pdfDirectory = "https://localhost:7275/assets/Upload/";
 
-
-        // ... (your existing code)
 
         function loadForm() {
             $.ajax({
@@ -227,9 +225,11 @@
 
             var namaSection = $("#NamaSection").val();
             var deskripsi = $("#DeskripsiSection").val();
-            var vidio = $("#VidioPembelajaran").val();
+            var video = $("#VideoPembelajaran")[0].files[0];
             var modul = $("#ModulPembelajaran")[0].files[0];
 
+
+            // Validasi form
             if (!namaSection.trim()) {
                 $("#errorNamaSection").text("Nama Section tidak boleh kosong.");
                 return;
@@ -244,30 +244,27 @@
                 $("#errorDeskripsiSection").text("");
             }
 
-            if (!vidio.trim()) {
-                $("#errorVidioSection").text("Deskripsi PelatihanSection tidak boleh kosong.");
-                return;
-            } else {
-                $("#errorVidioSection").text("");
+            if (video) {
+                uploadVideo(video);
             }
-
-            if (vidio) {
-                uploadFile(vidio); // Upload the selected file
-            }
-
+            // Upload berkas modul jika ada
             if (modul) {
-                uploadFile(modul); // Upload the selected file
+                uploadFile(modul);
             }
 
+
+            // Persiapkan data untuk dikirim ke server
             var data = {
                 id_section: 0,
                 id_pelatihan: IdPelatihan,
                 nama_section: namaSection,
-                video_pembelajaran: video ? video.name : null,
+                video_pembelajaran: video ? video.name : null, // Ubah ke string kosong jika tidak ada videoId
                 modul_pembelajaran: modul ? modul.name : null,
-                deskripsi: deskripsi
+                deskripsi: deskripsi,
+                status: 1
             };
 
+            // Kirim data ke server menggunakan AJAX
             $.ajax({
                 url: rootHost + '/Section/InsertSection',
                 method: "post",
@@ -277,7 +274,7 @@
                     notifikasiTambahSukses();
                 },
                 error: function () {
-                    // Handle error
+                    // Tangani kesalahan
                 }
             });
         });
@@ -287,7 +284,7 @@
 
             var namaSection = $("#EditNamaSection").val();
             var deskripsi = $("#EditDeskripsiSection").val();
-            var vidio = $("#EditVidioPembelajaran").val();
+            var Video = $("#EditVideoPembelajaran")[0].files[0];
             var modul = $("#EditModulPembelajaran")[0].files[0];
 
             if (!namaSection.trim()) {
@@ -304,17 +301,9 @@
                 $("#errorEditDeskripsiSection").text("");
             }
 
-            if (!vidio.trim()) {
-                $("#errorEditVidioSection").text("Deskripsi PelatihanSection tidak boleh kosong.");
-                return;
-            } else {
-                $("#errorEditVidioSection").text("");
-            }
-
-            var videoId = extractYouTubeVideoId(vidio);
-
-            if (videoId) {
-                vidio = videoId;
+            
+            if (video) {
+                uploadVideo(video);
             }
 
             if (modul) {
@@ -325,7 +314,7 @@
                 id_section: IdSection, 
                 id_pelatihan: IdPelatihan,
                 nama_section: namaSection,
-                video_pembelajaran: vidio,
+                video_pembelajaran: video ? video.name : null,
                 modul_pembelajaran: modul ? modul.name : null,
                 deskripsi: deskripsi
             };
@@ -380,7 +369,7 @@
 
             $("#EditNamaSection").val(namaSection);
             $("#EditDeskripsiSection").val(deskripsiSection);
-            $("#EditVidioPembelajaran").val(videoPembelajaran);
+            $("#EditVideoPembelajaran").val(videoPembelajaran);
             $('#edit_section').modal('show');
         });
 
@@ -391,6 +380,26 @@
             var match = url.match(regex);
 
             return match ? match[1] : null;
+        }
+        function uploadVideo(file) {
+            var formData = new FormData();
+            formData.append("file", file);
+
+            $.ajax({
+                url: rootHost + '/Section/UploadVideo',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    // Handle success, if needed
+                    console.log("File uploaded successfully");
+                },
+                error: function () {
+                    // Handle error, if needed
+                    console.log("Error uploading file");
+                }
+            });
         }
 
         function uploadFile(file) {

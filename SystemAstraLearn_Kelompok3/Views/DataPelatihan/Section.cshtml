@@ -34,7 +34,7 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="VideoPembelajaran" style="color: #066CBB; font-family: 'Poppins', sans-serif;">Video Pembelajaran *</label>
-                            <input type="file" id="VideoPembelajaran" name="VideoPembelajaran" class="form-control" accept="video/*" />
+                            <input type="file" id="VideoPembelajaran" name="VideoPembelajaran" class="form-control" accept=".mp4" />
                             <span class="text-danger" id="errorVideoPembelajaran"></span>
                         </div>
 
@@ -99,7 +99,7 @@
 
             var namaSection = $("#NamaSection").val();
             var deskripsi = $("#DeskripsiSection").val();
-            var videoFile = $("#VideoPembelajaran")[0].files[0];
+            var video = $("#VideoPembelajaran")[0].files[0];
             var modul = $("#ModulPembelajaran")[0].files[0];
 
 
@@ -118,24 +118,24 @@
                 $("#errorDeskripsiSection").text("");
             }
 
+            if (video) {
+                uploadVideo(video);
+            }
             // Upload berkas modul jika ada
             if (modul) {
                 uploadFile(modul);
             }
 
-            if (videoFile) {
-                uploadFile(videoFile);
-            }
 
             // Persiapkan data untuk dikirim ke server
             var data = {
                 id_section: 0,
                 id_pelatihan: IdPelatihan,
                 nama_section: namaSection,
-                video_pembelajaran: videoFile ? videoFile.name : null, // Ubah ke string kosong jika tidak ada videoId
+                video_pembelajaran: video ? video.name : null, // Ubah ke string kosong jika tidak ada videoId
                 modul_pembelajaran: modul ? modul.name : null,
                 deskripsi: deskripsi,
-                status : status
+                status : 1
             };
 
             // Kirim data ke server menggunakan AJAX
@@ -152,6 +152,27 @@
                 }
             });
         });
+
+        function uploadVideo(file) {
+            var formData = new FormData();
+            formData.append("file", file);
+
+            $.ajax({
+                url: rootHost + '/Section/UploadVideo',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    // Handle success, if needed
+                    console.log("File uploaded successfully");
+                },
+                error: function () {
+                    // Handle error, if needed
+                    console.log("Error uploading file");
+                }
+            });
+        }
 
         // Fungsi upload berkas
         function uploadFile(file) {
