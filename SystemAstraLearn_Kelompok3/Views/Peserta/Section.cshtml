@@ -101,9 +101,9 @@
         var rootWebHost3 = "https://localhost:7275/MengerjakanExam/";
         var idBerikutnya;
         var NamaModul;
+        var video = "https://localhost:7275/assets/Video/";
         var RiwayatSection;
         var IdLogin = $("#idLogin").val()
-        var linkYt = "https://www.youtube.com/embed/";
         var pdfDirectory = "https://localhost:7275/assets/Upload/";
 
         var elem = $(IdSection);
@@ -128,14 +128,10 @@
 
                         // Update the HTML elements with the received data
                         $("#namaSection").text(data.nama_section);
-                        $("#videoContainer").attr("src", linkYt + data.video_pembelajaran);
+                        $("#videoContainer").attr("src", video + data.video_pembelajaran);
                         $("#deskripsiSection").text(data.deskripsi);
+                        NamaSection = data.nama_section;
                         NamaModul = data.modul_pembelajaran;
-
-                        $("#videoContainer").on("ended", function () {
-                            console.log("Video selesai diputar");
-                            $(".lanjut-btn").show();
-                        });
                     } else {
                         console.error("Failed to load section data.");
                     }

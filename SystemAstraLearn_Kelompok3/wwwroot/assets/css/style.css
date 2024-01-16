@@ -61,7 +61,7 @@
 
 body1 {
     display: flex;
-    background-color: #C7E3F8;
+    background-color: #f0f0f0;
     flex-direction: column;
 }
 
@@ -260,7 +260,7 @@ section1 .card1 .about {
 --------------------------------------------------------------*/
 body {
     font-family: "Poppins", sans-serif;
-    background-color: #C7E3F8;
+    background-color: #f0f0f0;
     color: #444444;
 }
 

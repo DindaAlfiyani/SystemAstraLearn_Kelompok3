@@ -3,31 +3,35 @@
     Layout = "_Layout";
 }
 
-<div class="pagetitle">
-    <h1>Klasifikasi Pelatihan</h1>
-</div><!-- End Page Title -->
-
-<section class="section">
-    <div class="container-fluid">
+    <div class="pagetitle">
+        <h1>Klasifikasi Pelatihan</h1>
+        </br>
         <button class="btn btn-sm btn-primary mb-3" data-toggle="modal" data-target="#tambah_klasifikasi" style="background-color: #066CBB; color:seashell; border-radius: 7px; font-size: 20px;">
             <i class="fas fa-plus fa-sm"></i> Tambah Klasifikasi
         </button>
-        <!-- Table with stripped rows -->
-        <div class="table-responsive">
-            <table class="table table-striped" style="width:100%" id="dataTable">
-                <thead>
-                    <tr>
-                        <th scope="col">No</th>
-                        <th scope="col">Nama Klasifikasi</th>
-                        <th scope="col">Deskripsi</th>
-                        <th scope="col">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+        <div class="card">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <div class="table-responsive">
+                        <table class="table table-striped" style="width:100%" id="dataTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Nama Klasifikasi</th>
+                                    <th scope="col">Deskripsi</th>
+                                    <th scope="col">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
     <!-- Modal -->
     <div class="modal fade" id="tambah_klasifikasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -97,13 +101,30 @@
 </section>
 <style>
     .section {
-        min-height: 78vh;
+        min-height: 76vh;
         display: flex;
         flex-direction: column;
     }
 
     .container-fluid {
         flex: 1;
+    }
+
+    .card {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        width: 100%; /* Set the width as needed */
+        overflow: hidden; /* To prevent table overflow */
+    }
+
+    .card-body {
+        width: 1450px;
+    }
+
+    .table {
+        margin-bottom: 0; /* Menghilangkan margin atau gutters di dalam tabel */
     }
 </style>
 <script>

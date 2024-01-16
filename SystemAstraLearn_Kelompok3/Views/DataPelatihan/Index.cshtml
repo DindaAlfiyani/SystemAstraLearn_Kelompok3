@@ -5,33 +5,35 @@
 
 <div class="pagetitle">
     <h1>Pelatihan</h1>
+    </br>
 </div>
 
 <section class="section">
-    <div class="container-fluid">
+            <div class="container-fluid">
         <button class="btn btn-sm btn-primary mb-3" data-toggle="modal" data-target="#tambah_klasifikasi" style="background-color: #066CBB; color:seashell; border-radius: 7px; font-size: 20px;">
             <i class="fas fa-plus fa-sm"></i> Tambah Pelatihan
         </button>
         <!-- Table with stripped rows -->
-        <div class="table-responsive">
-            <table class="table table-striped" style="width:100%" id="dataTable">
-                <thead>
-                    <tr>
-                        <th scope="col">No</th>
-                        <th scope="col">Nama Pelatihan</th>
-                        <th scope="col">Deskripsi Pelatihan</th>
-                        <th scope="col">Klasifikasi Pelatihan</th>
-                        <th scope="col">Jumlah Peserta</th>
-                        <th scope="col">Nilai Minimum</th>
-                        <th scope="col">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+                <div class="table-responsive">
+                    <table class="table table-striped" style="width:100%" id="dataTable">
+                        <thead>
+                                <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Nama Pelatihan</th>
+                                    <th scope="col">Deskripsi Pelatihan</th>
+                                    <th scope="col">Klasifikasi Pelatihan</th>
+                                    <th scope="col">Jumlah Peserta</th>
+                                    <th scope="col">Nilai Minimum</th>
+                                    <th scope="col">Aksi</th>
+                                </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-
     <!-- Modal -->
     <div class="modal fade" id="tambah_klasifikasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -109,9 +111,10 @@
         </div>
     </div>
 </section>
+
 <style>
     .section {
-        min-height: 78vh;
+        min-height: 76vh;
         display: flex;
         flex-direction: column;
     }
@@ -120,6 +123,8 @@
         flex: 1;
     }
 </style>
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var rootHost = "http://localhost:5114";
@@ -256,8 +261,8 @@
                 id_klasifikasi: klasifikasiPelatihan,
                 id_sertifikat: 0,
                 nama_pelatihan: namaPelatihan,
-                tanggal_mulai: null,
-                tanggal_selesai: null,
+                tanggal_mulai: "2024-01-11",
+                tanggal_selesai: "2024-01-11",
                 deskripsi_pelatihan: deskripsiPelatihan,
                 jumlah_peserta: 0,
                 nama_klasifikasi: namaPelatihan,
@@ -401,11 +406,15 @@
                 id_pelatihan: pelatihanId,
                 id_pengguna: IdLogin,
                 id_klasifikasi: klasifikasiPelatihan,
+                id_sertifikat: 0,
                 nama_pelatihan: namaPelatihan,
+                tanggal_mulai: "2024-01-11",
+                tanggal_selesai: "2024-01-11",
                 deskripsi_pelatihan: deskripsiPelatihan,
-                jumlah_pelatihan: 0,
+                jumlah_peserta: 0,
                 nama_klasifikasi: namaPelatihan,
-                nilai: 0
+                nilai: 0,
+                status: 1
             };
 
             console.log(data);

@@ -8,17 +8,15 @@
     <h4>@(ViewBag.namaPelatihan)</h4>
     <input type="hidden" id="idPelatihan" value="@ViewBag.idPelatihan" />
     <h4 id="nilaiMinimum2">Nilai Minimum : @(ViewBag.nilaiMinimum)</h4>
-</div>
 
-<section class="section">
-    <div class="container-fluid">
-        <button class="btn btn-sm btn-primary mb-3" data-toggle="modal" data-target="#tambah_exercise" style="background-color: #066CBB; color:seashell; border-radius: 7px; font-size: 20px;">
-            <i class="fas fa-plus fa-sm"></i> Tambah Exam
-        </button>
-        <button class="btn btn-sm btn-warning mb-3" data-toggle="modal" data-target="#ubah_nilai_minimum" style="background-color: #066CBB; color:seashell; border-radius: 7px; font-size: 20px;">
-            <i class="fas fa-edit fa-sm"></i> Ubah Nilai Minimum
-        </button>
+    
         <div class="table-responsive">
+            <button class="btn btn-sm btn-primary mb-3" data-toggle="modal" data-target="#tambah_exercise" style="background-color: #066CBB; color:seashell; border-radius: 7px; font-size: 20px;">
+                <i class="fas fa-plus fa-sm"></i> Tambah Exam
+            </button>
+            <button class="btn btn-sm btn-warning mb-3" data-toggle="modal" data-target="#ubah_nilai_minimum" style="background-color: #066CBB; color:seashell; border-radius: 7px; font-size: 20px;">
+                <i class="fas fa-edit fa-sm"></i> Ubah Nilai Minimum
+            </button>
             <table class="table table-striped" style="width:100%" id="dataTable">
                 <thead>
                     <tr>
@@ -28,12 +26,8 @@
                         <th scope="col">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
-                </tbody>
             </table>
         </div>
-    </div>
-
     <div class="modal fade" id="tambah_exercise" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -233,7 +227,7 @@
 </section>
 <style>
     .section {
-        min-height: 78vh;
+        min-height: 76vh;
         display: flex;
         flex-direction: column;
     }
@@ -391,7 +385,8 @@
                 pilgan3: pilgan3,
                 pilgan4: pilgan4,
                 pilgan5: pilgan5,
-                kunci_jawaban: kunciJawaban
+                kunci_jawaban: kunciJawaban,
+                status: 1
             };
             console.log(data);
             $.ajax({
@@ -609,7 +604,8 @@
                 pilgan3: pilgan3,
                 pilgan4: pilgan4,
                 pilgan5: pilgan5,
-                kunci_jawaban: kunciJawaban
+                kunci_jawaban: kunciJawaban,
+                status: 1
             };
 
             $.ajax({

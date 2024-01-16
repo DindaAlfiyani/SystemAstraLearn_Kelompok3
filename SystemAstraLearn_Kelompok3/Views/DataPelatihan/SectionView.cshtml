@@ -210,9 +210,11 @@
         }
 
         $(document).on("click", ".update-href-btn", function () {
-            var newHref = rootWebHost2 + NamaSection + '/' + IdSection + '/' + IdPelatihan;
+            var encodedNamaSection = encodeURIComponent(NamaSection);
+            var newHref = rootWebHost2 + encodedNamaSection + '/' + IdSection + '/' + IdPelatihan;
             window.location.href = newHref;
         });
+
 
         $(document).on("click", ".modul-btn", function () {
             var pdfUrl = pdfDirectory + NamaModul;
@@ -284,7 +286,7 @@
 
             var namaSection = $("#EditNamaSection").val();
             var deskripsi = $("#EditDeskripsiSection").val();
-            var Video = $("#EditVideoPembelajaran")[0].files[0];
+            var video = $("#EditVideoPembelajaran")[0].files[0];
             var modul = $("#EditModulPembelajaran")[0].files[0];
 
             if (!namaSection.trim()) {
@@ -316,7 +318,8 @@
                 nama_section: namaSection,
                 video_pembelajaran: video ? video.name : null,
                 modul_pembelajaran: modul ? modul.name : null,
-                deskripsi: deskripsi
+                deskripsi: deskripsi,
+                status: 1
             };
 
             $.ajax({
@@ -369,18 +372,9 @@
 
             $("#EditNamaSection").val(namaSection);
             $("#EditDeskripsiSection").val(deskripsiSection);
-            $("#EditVideoPembelajaran").val(videoPembelajaran);
             $('#edit_section').modal('show');
         });
 
-
-        function extractYouTubeVideoId(url) {
-            var regex = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-
-            var match = url.match(regex);
-
-            return match ? match[1] : null;
-        }
         function uploadVideo(file) {
             var formData = new FormData();
             formData.append("file", file);

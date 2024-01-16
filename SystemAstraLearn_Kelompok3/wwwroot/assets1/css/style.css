@@ -144,7 +144,7 @@
 --------------------------------------------------------------*/
 body1 {
     display: flex;
-    background-color: #C7E3F8;
+    background-color: #f0f0f0;
     flex-direction: column;
 }
 
@@ -375,7 +375,7 @@ section1 .card1 .about {
 
 body {
     font-family: "Open Sans", sans-serif;
-    background: #C7E3F8;
+    background: #f0f0f0;
     color: #444444;
 }
 
@@ -410,7 +410,7 @@ h6 {
 }
 
 .main {
-    background-color: #C7E3F8;
+    background-color: #f0f0f0;
     margin-left: 405px;
     width: 1590px;
     padding: 20px 30px;
@@ -420,7 +420,7 @@ h6 {
 }
 
 .main1 {
-    background-color: #C7E3F8;
+    background-color: #f0f0f0;
     margin-left: 405px;
     width: 1490px;
     padding: 20px 30px;

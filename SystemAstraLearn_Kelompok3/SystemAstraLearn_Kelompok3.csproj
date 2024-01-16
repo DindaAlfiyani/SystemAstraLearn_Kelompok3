@@ -16,4 +16,9 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\assets\Upload\" />
+    <Folder Include="wwwroot\assets\Video\" />
+  </ItemGroup>
+
 </Project>
