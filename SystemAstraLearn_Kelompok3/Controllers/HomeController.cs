@@ -2,16 +2,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Data.SqlClient;
 
 namespace SystemAstraLearn_Kelompok3.Controllers
 {
     public class HomeController : Controller
     {
         private readonly UserRepository _userRepository;
+        private readonly string _connectionString;
 
         public HomeController(IConfiguration configuration)
         {
             _userRepository = new UserRepository(configuration);
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         [Route("Login/{username}")]
@@ -115,6 +118,35 @@ namespace SystemAstraLearn_Kelompok3.Controllers
 
             // Pass the login status to the view
             ViewBag.IsLoggedIn = isLoggedIn;
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                // Query SQL untuk mengambil klasifikasi dari tabel
+                string sqlQuery = "SELECT nama_klasifikasi FROM tb_klasifikasi_pelatihan where status = 1";
+
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    // Eksekusi query
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            // Ambil nilai NamaKlasifikasi dari hasil query
+                            string klasifikasiName = reader["nama_klasifikasi"].ToString();
+
+                            // Pass the klasifikasi name to the view
+                            ViewBag.KlasifikasiName = klasifikasiName;
+                        }
+                        else
+                        {
+                            // Handle the case where no klasifikasi is found
+                            ViewBag.KlasifikasiName = "No Klasifikasi Found";
+                        }
+                    }
+                }
+            }
 
             return View();
         }

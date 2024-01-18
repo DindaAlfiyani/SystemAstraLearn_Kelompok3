@@ -28,6 +28,41 @@
         </div>
     </div>
 </section>
+<section1>
+    <div class="container">
+        <div class="d-flex justify-content-start py-4">
+        </div><!-- End Logo -->
+    </div>
+
+    <div class="swiper mySwiper Swiper1 container" id="swiper1">
+        <div class="swiper-wrapper content">
+            <!-- Slide 1 -->
+            <div class="swiper-slide card1" id="card1_1">
+                <div class="box2"></div>
+                <div class="card1-content">
+                    <div class="image">
+                        <img src="~/assets1/img/Logo_AstraLearn.png" alt="Profile Image">
+                    </div>
+                    <div class="name-profession">
+                        <span class="name">John Doe</span>
+                        <span class="profession">Web Developer</span>
+                    </div>
+                    <div class="">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi nobis sequi, nam tenetur magni.</p>
+                    </div>
+                    <div class="button b2">
+                        <button class="aboutMe">About Me</button>
+                        <button class="hireMe">Hire Me</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="swiper-pagination swiper-pagination1"></div>
+    </div>
+    <div class="swiper-button-next swiper-button-next1"></div>
+    <div class="swiper-button-prev swiper-button-prev1"></div>
+</section1>
 <style>
     .section {
         min-height: 78vh;
@@ -88,12 +123,9 @@
             pelatihanId = $(this).closest('tr').data("id");
             var namaPelatihan = $(this).closest('tr').find('td:eq(1)').text();
             var data = {
-                id_mengikuti: 0,
                 id_pengguna: IdLogin,
                 id_pelatihan: pelatihanId,
-                riwayat_section: 0,
-                riwayat_nilai: 0,
-                rating: 0
+                riwayat_section: 0
             }
 
             $.ajax({
@@ -113,3 +145,211 @@
         });
     });
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var rootHost = "http://localhost:5114";
+        var rootWebHost = "https://localhost:7275/SebelumMengikutiPelatihan/";
+        var pelatihanId;
+        var IdLogin = $("#idLogin").val();
+        var video;
+        function fetchData() {
+            $.ajax({
+                url: "http://localhost:5114/Pelatihan/GetAllPelatihan",
+                type: "GET",
+                dataType: "json",
+                success: function (result) {
+                    if (result.status === 200) {
+                        populateCards(result.data);
+                    } else {
+                        console.error("Failed to fetch data.");
+                    }
+                },
+                error: function () {
+                    console.error("Error fetching data.");
+                }
+            });
+        }
+                        function populateCards(data) {
+                        // Clear existing cards
+                        $(".swiper-wrapper.content").empty();
+
+                        // Iterate over the data and create cards
+                        data.forEach(function (pelatihan, index) {
+                
+
+                            var cardHtml = `
+                                <div class="swiper-slide card1" id="card1_${index + 1}">
+                                    <div class="box2"></div>
+                                    <div class="card1-content">
+                                        <div class="image">
+                                            <img src="${video + data.video_pembelajaran}" alt="Video Thumbnail">
+                                        </div>
+                                        <div class="name-profession">
+                                            <span class="name">${pelatihan.nama_pelatihan}</span>
+                                            <span class="profession">${pelatihan.nama_klasifikasi}</span>
+                                        </div>
+                                        <div class="">
+                                            <p>${pelatihan.deskripsi_pelatihan}</p>
+                                        </div>
+                                        <div class="button b2">
+                                             <button class="btn btn-primary btn-ikuti" style="background-color: #066CBB">Ikuti Pelatihan</i></button>
+                                        </div>
+                                    </div>
+                                </div>`;
+
+                            // Append the card to the swiper
+                            $(".swiper-wrapper.content").append(cardHtml);
+                        });
+
+                        // Initialize the swiper after populating cards
+                        var swiper1 = new Swiper("#swiper1", {
+                            slidesPerView: 4,
+                            spaceBetween: 10,
+                            grabCursor: true,
+                            slidesPerGroup: 1,
+                            loop: false,
+                            loopFillGroupWithBlank: true,
+                            pagination: {
+                                el: ".swiper-pagination1",
+                                clickable: true,
+                            },
+                            navigation: {
+                                nextEl: ".swiper-button-next1",
+                                prevEl: ".swiper-button-prev1",
+                            },
+                        });
+
+                        // Add click event listeners to individual slides in swiper1
+                        document.querySelectorAll('#swiper1 .swiper-slide.card1').forEach(function (slide) {
+                            slide.addEventListener('click', function () {
+                                var index = slide.getAttribute('id').split('_')[1];
+                                swiper1.slideTo(index);
+                            });
+                        });
+                    }
+
+                    $('#swiper1').on('click', 'button.btn-ikuti', function () {
+                        pelatihanId = $(this).closest('tr').data("id");
+                        var namaPelatihan = $(this).closest('tr').find('td:eq(1)').text();
+                        var data = {
+                            id_pengguna: IdLogin,
+                            id_pelatihan: pelatihanId,
+                            riwayat_section: 0
+                        }
+
+                        $.ajax({
+                            url: rootHost + "/MengikutiPelatihan/InsertMengikutiPelatihan",
+                            type: "post",
+                            data: JSON.stringify(data),
+                            dataType: "json",
+                            contentType: "application/json",
+                            success: function (result) {
+                                var newHref = rootWebHost + pelatihanId + '/0/' + namaPelatihan;
+                                window.location.href = newHref;
+                            },
+                            error: function () {
+                                console.error("Error fetching data.");
+                            }
+                        });
+                    });
+
+                    // Fetch data when the page is loaded
+                    fetchData();
+                });
+            </script>
+
+
+
+<style>
+    .card1 {
+        position: relative;
+        background-color: #fff;
+        border-radius: 20px;
+        height: 350px; /* Adjusted height to 150px */
+        width: 420px; /* Adjusted width to 150px */
+        margin: 20px 0;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        padding: 25px; /* Adjusted padding to make it smaller */
+    }
+
+        .card1 .card1-content {
+            display: flex;
+            flex-direction: column;
+            padding: 10px; /* Adjusted padding to make it smaller */
+            position: relative;
+            z-index: 100;
+        }
+
+        .card1 .b2 button {
+            background: #006CBB;
+        }
+
+    section1 .card1 .image {
+        height: 140px;
+        width: 210px;
+        border-radius: 15px; /* Ganti nilai border-radius dengan 15px atau sesuai kebutuhan */
+        padding: 3px;
+        background: #fff;
+        box-shadow: 0px -1px 4px 2px rgba(0, 0, 0, 0.25);
+    }
+
+        section1 .card1 .image img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 15px; /* Ganti nilai border-radius dengan 15px atau sesuai kebutuhan */
+            border: 3px solid #fff;
+        }
+
+    .box2 {
+        position: absolute;
+        height: 140px;
+        width: 210px;
+        border-radius: 20px 20px 0 0;
+        background: linear-gradient(106.32deg, #f0f0f0 14.23%, rgba(255, 25, 25, 0) 139.97%);
+    }
+
+    .swiper-button-next1,
+    .swiper-button-prev1 {
+        position: absolute;
+        top: 65%;
+        transform: translateY(-50%);
+        font-size: 20px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        z-index: 1;
+    }
+
+    .swiper-button-prev1 {
+        left: 50px;
+    }
+
+    .swiper-button-next1 {
+        right: 50px;
+    }
+
+    .swiper-container {
+        position: relative;
+        width: 750px;
+    }
+
+    .swiper-button-next2,
+    .swiper-button-prev2 {
+        position: absolute;
+        top: 70%;
+        transform: translateY(-50%);
+        font-size: 20px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        z-index: 1;
+    }
+
+    .swiper-button-prev2 {
+        left: 50px;
+    }
+
+    .swiper-button-next2 {
+        right: 50px;
+    }
+</style>

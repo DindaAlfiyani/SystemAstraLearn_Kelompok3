@@ -101,10 +101,10 @@
 
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
-                <li class="nav-item d-flex align-items-center"><a class="nav-link nav-icon" asp-controller="Home" asp-action="CaraBelajar" style="color: #006CBB; font-weight: 500;">Cara Belajar</a></li>
+                @*<li class="nav-item d-flex align-items-center"><a class="nav-link nav-icon" asp-controller="Home" asp-action="CaraBelajar" style="color: #006CBB; font-weight: 500;">Cara Belajar</a></li>
                 <li class="nav-item d-flex align-items-center"><a class="nav-link nav-icon" asp-controller="Home" asp-action="Kelas" style="color: #006CBB; font-weight: 500;">Kelas</a></li>
                 <li class="nav-item d-flex align-items-center"><a class="nav-link nav-icon" asp-controller="Home" asp-action="CaraDapatSertifikat" style="color: #006CBB; font-weight: 500;">Cara Dapat Sertifikat</a></li>
-
+*@
                 <!-- Move the search icon outside of the dropdown list -->
                 <li class="nav-item d-block d-lg-none">
                     <a class="nav-link nav-icon search-bar-toggle " href="#">
@@ -178,34 +178,34 @@
     </header>
     <!-- End Header -->
     <!-- ======= Sidebar ======= -->
-    <aside id="sidebar" class="sidebar">
+    <aside id="sidebar" class="sidebar" style="background-color: #fff;">
 
         <ul class="sidebar-nav active" id="sidebar-nav">
             @if (@Context.Session.GetString("Peran") == "pelatih")
             {
-                <li class="nav-item" style="background-color: #EFF7FB;">
-                    <a class="nav-link collapsed" asp-controller="Pelatih" asp-action="Index" style="background-color: #EFF7FB;">
+                <li class="nav-item" style="background-color: #fff;">
+                    <a class="nav-link collapsed" asp-controller="Pelatih" asp-action="Index" style="background-color: #fff;">
                         <i class="bi bi-house-fill"></i>
                         <h5 class="ms-2 mb-0" style="font-weight: 600;"><span>Dashboard</span></h5>
                     </a>
                 </li><!-- End Dashboard Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" asp-controller="DataPelatihan" asp-action="Index" style="background-color: #EFF7FB;">
+                    <a class="nav-link collapsed" asp-controller="DataPelatihan" asp-action="Index" style="background-color: #fff;">
                         <i class="bi bi-card-list"></i>
                         <h5 class="ms-2 mb-0" style="font-weight: 600;"><span>Data Pelatihan</span></h5>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" asp-controller="Pelatih" asp-action="DataPeserta" style="background-color: #EFF7FB;">
+                    <a class="nav-link collapsed" asp-controller="Pelatih" asp-action="DataPeserta" style="background-color: #fff;">
                         <i class="bi bi-person-vcard"></i>
                         <h5 class="ms-2 mb-0" style="font-weight: 600;"><span>Data Peserta</span></h5>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a id="logoutLink" class="nav-link collapsed" asp-controller="Home" asp-action="Index" style="background-color: #EFF7FB;">
+                    <a id="logoutLink" class="nav-link collapsed" asp-controller="Home" asp-action="Index" style="background-color: #fff;">
                         <i class="bi bi-box-arrow-right"></i>
                         <h5 class="ms-2 mb-0" style="font-weight: 600;"><span>Logout</span></h5>
                     </a>
@@ -216,7 +216,7 @@
             @if (@Context.Session.GetString("Peran") == "admin")
             {
                 <li class="nav-item">
-                    <a class="nav-link collapsed" asp-controller="Admin" asp-action="Index" style="background-color: #EFF7FB;">
+                    <a class="nav-link collapsed" asp-controller="Admin" asp-action="Index" style="background-color: #fff;">
                         <i class="bi bi-house-fill"></i>
                         <h5 class="ms-2 mb-0" style="font-weight: 600;"><span>Dashboard</span></h5>
                     </a>
@@ -225,7 +225,7 @@
                 <!-- End Dashboard Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" asp-controller="KlasifikasiPelatihan" asp-action="Index" style="background-color: #EFF7FB;">
+                    <a class="nav-link collapsed" asp-controller="KlasifikasiPelatihan" asp-action="Index" style="background-color: #fff;">
                         <i class="bi bi-card-list"></i>
                         <h5 class="ms-2 mb-0" style="font-weight: 600;"><span>Klasifikasi Pelatihan</span></h5>
                     </a>
@@ -234,7 +234,7 @@
                 <!-- End Dashboard Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" asp-controller="Admin" asp-action="DataPelatihan" style="background-color: #EFF7FB;">
+                    <a class="nav-link collapsed" asp-controller="Admin" asp-action="DataPelatihan" style="background-color: #fff;">
                         <i class="bi bi-card-checklist"></i>
                         <h5 class="ms-2 mb-0" style="font-weight: 600;"><span>Pelatihan</span></h5>
                     </a>
@@ -243,7 +243,7 @@
                 <!-- End Dashboard Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" asp-controller="KelolaAkses" asp-action="Index" style="background-color: #EFF7FB;">
+                    <a class="nav-link collapsed" asp-controller="KelolaAkses" asp-action="Index" style="background-color: #fff;">
                         <i class="bi bi-person-fill-gear"></i>
                         <h5 class="ms-2 mb-0" style="font-weight: 600;"><span>Hak Akses</span></h5>
                     </a>
@@ -252,7 +252,7 @@
                 <!-- End Dashboard Nav -->
 
                 <li class="nav-item">
-                    <a id="logoutLink" class="nav-link collapsed" asp-controller="Home" asp-action="Index" style="background-color: #EFF7FB;">
+                    <a id="logoutLink" class="nav-link collapsed" asp-controller="Home" asp-action="Index" style="background-color: #fff;">
                         <i class="bi bi-box-arrow-right"></i>
                         <h5 class="ms-2 mb-0" style="font-weight: 600;"><span>Logout</span></h5>
                     </a>
@@ -263,21 +263,21 @@
             @if (@Context.Session.GetString("Peran") == "peserta")
             {
                 <li class="nav-item">
-                    <a class="nav-link collapsed" asp-controller="Peserta" asp-action="Dashboard" style="background-color: #EFF7FB;">
+                    <a class="nav-link collapsed" asp-controller="Peserta" asp-action="Dashboard" style="background-color: #fff;">
                         <i class="bi bi-house-door-fill"></i>
                         <h5 class="ms-2 mb-0" style="font-weight: 600;"><span>Dashboard</span></h5>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" asp-controller="Peserta" asp-action="Kelas" style="background-color: #EFF7FB;">
+                    <a class="nav-link collapsed" asp-controller="Peserta" asp-action="Kelas" style="background-color: #fff;">
                         <i class="bi bi-receipt"></i>
                         <h5 class="ms-2 mb-0" style="font-weight: 600;"><span>Kelas</span></h5>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" asp-controller="Peserta" asp-action="Index" style="background-color: #EFF7FB;">
+                    <a class="nav-link collapsed" asp-controller="Peserta" asp-action="Index" style="background-color: #fff;">
                         <i class="bi bi-receipt"></i>
                         <h5 class="ms-2 mb-0" style="font-weight: 600;"><span>Kelas Saya</span></h5>
                     </a>
@@ -286,7 +286,7 @@
                 <!-- End Dashboard Nav -->
 
                 <li class="nav-item">
-                    <a class="nav-link collapsed" asp-controller="Peserta" asp-action="Sertifikat" style="background-color: #EFF7FB;">
+                    <a class="nav-link collapsed" asp-controller="Peserta" asp-action="Sertifikat" style="background-color: #fff;">
                         <i class="bi bi-layout-text-window-reverse"></i>
                         <h5 class="ms-2 mb-0" style="font-weight: 600;"><span>Sertifikat</span></h5>
                     </a>
@@ -295,7 +295,7 @@
                 <!-- End Dashboard Nav -->
 
                 <li class="nav-item">
-                    <a id="logoutLink" class="nav-link collapsed" asp-controller="Home" asp-action="Index" style="background-color: #EFF7FB;">
+                    <a id="logoutLink" class="nav-link collapsed" asp-controller="Home" asp-action="Index" style="background-color: #fff;">
                         <i class="bi bi-box-arrow-right"></i>
                         <h5 class="ms-2 mb-0" style="font-weight: 600;"><span>Logout</span></h5>
                     </a>

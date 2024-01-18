@@ -23,7 +23,7 @@
                     Unduh Modul <i class="bi bi-arrow-down-circle-fill"></i>
                 </button>
                 <button class="btn btn-secondary update-href-btn" style="background-color: dodgerblue; border-radius: 10px; font-size: 20px;">Exercise</button>
-                <button class="btn btn-secondary lanjut-btn" style="background-color: #483D8B; border-radius: 10px; font-size: 20px;">Lanjutkan<i class='bi bi-arrow-right'></i></button>
+                
             </div>
         </div>
 
@@ -225,11 +225,9 @@
         $(document).on("click", ".lanjut-btn", function () {
             var namaPelatihan = $("#namaSection").text(); // Ambil teks dari elemen dengan ID namaSection
             var data = {
-                id_mengikuti_pelatihan: 0,
                 id_pengguna: IdLogin,
                 id_pelatihan: IdPelatihan,
-                riwayat_section: 0,
-                status: 1
+                riwayat_section: 0
             };
 
             $.ajax({
