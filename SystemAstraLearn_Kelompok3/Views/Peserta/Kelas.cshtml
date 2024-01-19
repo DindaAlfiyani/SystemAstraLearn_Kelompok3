@@ -79,7 +79,15 @@
         var rootHost = "http://localhost:5114";
         var rootWebHost = "https://localhost:7275/SebelumMengikutiPelatihan/";
         var pelatihanId;
+        var TanggalMulai;
         var IdLogin = $("#idLogin").val();
+
+        TanggalMulai = new Date().toISOString();
+
+        // Inisialisasi local storage jika belum ada data
+        if (!localStorage.getItem('dataMengikutiPelatihan')) {
+            localStorage.setItem('dataMengikutiPelatihan', JSON.stringify([]));
+        }
 
         new DataTable('#dataTable', {
             ajax: {
@@ -121,12 +129,31 @@
 
         $('#dataTable').on('click', 'button.btn-ikuti', function () {
             pelatihanId = $(this).closest('tr').data("id");
+
+            // Pemeriksaan apakah pengguna sudah mengikuti pelatihan
+            if (penggunaSudahMengikuti(IdLogin, pelatihanId)) {
+                //alert('Anda sudah mengikuti pelatihan ini.');
+                var newHref = rootWebHost + pelatihanId + '/0/' + namaPelatihan;
+                window.location.href = newHref;
+                return;
+            }
+
             var namaPelatihan = $(this).closest('tr').find('td:eq(1)').text();
             var data = {
                 id_pengguna: IdLogin,
                 id_pelatihan: pelatihanId,
+                tanggal_mulai: TanggalMulai,
                 riwayat_section: 0
-            }
+            };
+
+            // Setelah sukses menyisipkan data pelatihan yang diikuti
+            var dataMengikutiPelatihan = localStorage.getItem('dataMengikutiPelatihan');
+            var mengikutiPelatihanArray = dataMengikutiPelatihan ? JSON.parse(dataMengikutiPelatihan) : [];
+
+            mengikutiPelatihanArray.push(data);
+
+            // Simpan kembali ke local storage
+            localStorage.setItem('dataMengikutiPelatihan', JSON.stringify(mengikutiPelatihanArray));
 
             $.ajax({
                 url: rootHost + "/MengikutiPelatihan/InsertMengikutiPelatihan",
@@ -143,7 +170,29 @@
                 }
             });
         });
+
+        // Fungsi untuk memeriksa apakah pengguna sudah mengikuti pelatihan
+        function penggunaSudahMengikuti(id_pengguna, id_pelatihan) {
+            // Mendapatkan data dari local storage (misalnya, dalam bentuk JSON string)
+            var dataMengikutiPelatihan = localStorage.getItem('dataMengikutiPelatihan');
+
+            // Jika data tidak ada, berarti pengguna belum mengikuti pelatihan apa pun
+            if (!dataMengikutiPelatihan) {
+                return false;
+            }
+
+            // Mengonversi JSON string menjadi objek JavaScript
+            var mengikutiPelatihanArray = JSON.parse(dataMengikutiPelatihan);
+
+            // Memeriksa apakah pengguna sudah mengikuti pelatihan dengan id_pelatihan tertentu
+            var penggunaSudahMengikutiPelatihan = mengikutiPelatihanArray.some(function (item) {
+                return item.id_pengguna === id_pengguna && item.id_pelatihan === id_pelatihan;
+            });
+
+            return penggunaSudahMengikutiPelatihan;
+        }
     });
+
 </script>
 
 <script>
