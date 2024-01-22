@@ -22,7 +22,7 @@
                                         <i class="bi bi-file-earmark-text-fill" style="color: #006CBB; font-size: 4em; "></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h1 id="pelatihan" style="color: #006CBB; font-size: 50px; font-family: Poppins, sans-serif;">145</h1>
+                                        <h1 id="jumlahPelatihan" style="color: #006CBB; font-size: 50px; font-family: Poppins, sans-serif;">145</h1>
                                     </div>
                                 </div>
                             </div>
@@ -38,7 +38,7 @@
                                         <i class="bi bi-file-earmark-bar-graph-fill" style="color: #006CBB; font-size: 4em;"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h1 id="pelatihan" style="color: #006CBB; font-size: 50px;">93</h1>
+                                        <h1 id="pelatihanBerjalan" style="color: #006CBB; font-size: 50px;">93</h1>
                                     </div>
                                 </div>
                             </div>
@@ -54,7 +54,7 @@
                                         <i class="bi bi-file-earmark-check-fill" style="color: #006CBB; font-size: 4em;"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h1 id="pelatihan" style="color: #006CBB; font-size: 50px;">30</h1>
+                                        <h1 id="pelatihanSelesai" style="color: #006CBB; font-size: 50px;">30</h1>
                                     </div>
                                 </div>
                             </div>
@@ -80,8 +80,7 @@
     <br />
     <br />
     <br />
-    <script src="https://u
-    g.com/swiper@8/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -187,3 +186,64 @@
     </style>
 
 </body1>
+<script>
+    $(document).ready(function () {
+        var IdLogin = $("#idLogin").val();
+        var rootHost = "http://localhost:5114";
+        var jumlahPelatihan;
+
+        $.ajax({
+            url: rootHost + '/LanjutkanPelatihan/GetLanjutkanPelatihan?idPengguna=' + IdLogin,
+            method: 'get',
+            contentType: 'application/json',
+            success: function (response) {
+                jumlahPelatihan = response.data.length;
+                console.log(jumlahPelatihan); // Move the console.log inside the success callback
+                $('#jumlahPelatihan').text(jumlahPelatihan);
+            },
+            error: function () {
+                console.error("Failed to load sections data.");
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        var rootHost = "http://localhost:5114";
+        var jumlahPelatihan;
+        var jumlahPeserta;
+        var jumlahSelesai;
+
+        function fetchData(url) {
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: rootHost + url,
+                    method: 'get',
+                    contentType: 'application/json',
+                    success: resolve,
+                    error: reject
+                });
+            });
+        }
+
+        fetchData('/Pelatihan/GetAllPelatihan')
+            .then(function (response) {
+                jumlahPelatihan = response.data.length;
+                $('#jumlahPelatihan').text(jumlahPelatihan);
+                return fetchData('/MengikutiPelatihan/GetAllMengikutiPelatihan');
+            })
+            .then(function (response) {
+                jumlahSelesai = response.data.length;
+                $('#jumlahPeserta').text(jumlahSelesai);
+                return fetchData('/Sertifikat/GetAllSertifikat');
+            })
+            .then(function (response) {
+                jumlahBerjalan = jumlahPelatihan - jumlahSelesai;
+                $('#pelatihanSelesai').text(jumlahSelesai);
+            })
+            .catch(function (error) {
+                console.error("Failed to load data:", error);
+            });
+    });
+</script>

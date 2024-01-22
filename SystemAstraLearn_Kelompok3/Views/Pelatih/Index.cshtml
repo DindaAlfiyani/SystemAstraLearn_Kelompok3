@@ -18,7 +18,7 @@
                                         <i class="bi bi-file-earmark-text-fill" style="color: #006CBB; font-size: 4em; "></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h1 id="pelatihan" style="color: #006CBB; font-size: 50px; font-family: Poppins, sans-serif;">145</h1>
+                                        <h1 id="jumlahPelatihan" style="color: #006CBB; font-size: 50px; font-family: Poppins, sans-serif;">0</h1>
                                     </div>
                                 </div>
                             </div>
@@ -34,7 +34,7 @@
                                         <i class="bi bi-file-earmark-person-fill" style="color: #006CBB; font-size: 4em;"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h1 id="pelatihan" style="color: #006CBB; font-size: 50px;">123</h1>
+                                        <h1 id="jumlahPeserta" style="color: #006CBB; font-size: 50px;">0</h1>
                                     </div>
                                 </div>
                             </div>
@@ -50,7 +50,7 @@
                                         <i class="bi bi-file-earmark-bar-graph-fill" style="color: #006CBB; font-size: 4em;"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h1 id="pelatihan" style="color: #006CBB; font-size: 50px;">93</h1>
+                                        <h1 id="pelatihanBerjalan" style="color: #006CBB; font-size: 50px;">0</h1>
                                     </div>
                                 </div>
                             </div>
@@ -66,7 +66,7 @@
                                         <i class="bi bi-file-earmark-check-fill" style="color: #006CBB; font-size: 4em;"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h1 id="pelatihan" style="color: #006CBB; font-size: 50px;">30</h1>
+                                        <h1 id="pelatihanSelesai" style="color: #006CBB; font-size: 50px;">30</h1>
                                     </div>
                                 </div>
                             </div>
@@ -275,6 +275,37 @@
         }
     </style>
 </body1>
+
+<script>
+    $(document).ready(function () {
+        var rootHost = "http://localhost:5114";
+        var IdLogin = $("#idLogin").val(); // Assuming you have IdLogin variable
+        
+        $.ajax({
+            url: rootHost + '/ViewPelatih/GetAllPelatihs?id_pengguna=' + IdLogin,
+            method: "get",
+            contentType: "application/json",
+            success: function (response) {
+                console.log(response);
+
+                if (response && response.status === 200 && response.data && response.data.length > 0) {
+                    var result = response.data[0];
+
+                    // Check if the properties exist before accessing them
+                    $("#jumlahPelatihan").text(result.jumlah_pelatihan !== undefined ? result.jumlah_pelatihan : "0");
+                    $("#jumlahPeserta").text(result.jumlah_peserta !== undefined ? result.jumlah_peserta : "0");
+                    $("#pelatihanBerjalan").text(result.pelatihan_berjalan !== undefined ? result.pelatihan_berjalan : "0");
+                    $("#pelatihanSelesai").text(result.pelatihan_selesai !== undefined ? result.pelatihan_selesai : "0");
+                } else {
+                    console.error("Invalid or empty response data.");
+                }
+            },
+            error: function () {
+                console.error("Error fetching data.");
+            }
+        });
+    });
+</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {

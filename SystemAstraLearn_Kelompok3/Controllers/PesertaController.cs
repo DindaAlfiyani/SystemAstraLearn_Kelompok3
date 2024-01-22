@@ -42,6 +42,15 @@ namespace SystemAstraLearn_Kelompok3.Controllers
             return View();
         }
 
+        [Route("MengikutiPelatihan2/{id}/{id2}/{nama}")]
+        public IActionResult SectionDone(int id, int id2, string nama)
+        {
+            ViewBag.idPelatihan = id;
+            ViewBag.idSection = id2;
+            ViewBag.namaPelatihan = nama;
+            return View();
+        }
+
         [Route("SebelumMengikutiPelatihan/{id}/{id2}/{nama}")]
         public IActionResult Welcome(int id, int id2, string nama)
         {
