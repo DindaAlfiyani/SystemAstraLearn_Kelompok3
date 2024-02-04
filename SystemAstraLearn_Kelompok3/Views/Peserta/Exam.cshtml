@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Peserta - Exercise";
+    ViewData["Title"] = "Peserta - Exam";
     Layout = "_LayoutSection";
 }
 @if (Context.Session.GetString("User") != null)
@@ -41,7 +41,7 @@
     </div>
 </section><!-- End Breadcrumbs -->
 
-<div class="container mt-sm-5 my-1" id="exercise-container">
+<div class="container mt-sm-5 my-1" id="exam-container">
     <br />
     <br />
 </div>
@@ -79,7 +79,7 @@
             success: function (response) {
                 if (response.status === 200) {
                     console.log(response);
-                    insertExerciseData(response.data);
+                    insertExamData(response.data);
                 }
             }
         });
@@ -97,40 +97,40 @@
         });
 
 
-        function insertExerciseData(data) {
-            var exerciseContainer = $("#exercise-container");
+        function insertExamData(data) {
+            var examContainer = $("#exam-container");
 
-            data.forEach(function (exercise, index) {
-                // Store the correct answer for each exercise
-                correctAnswers[index] = exercise.kunci_jawaban;
+            data.forEach(function (exam, index) {
+                // Store the correct answer for each exam
+                correctAnswers[index] = exam.kunci_jawaban;
 
-                var exerciseHtml = `
+                var examHtml = `
                                     <div class="question ml-sm-5 pl-sm-5 pt-2" style="font-family: 'Poppins', sans-serif;">
-                                    <div class="py-2 h5"><b>Soal ${index + 1}: ${exercise.soal}</b></div>
+                                    <div class="py-2 h5"><b>Soal ${index + 1}: ${exam.soal}</b></div>
                                     <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
-                                        <label class="options" data-correct="${exercise.kunci_jawaban}">
-                                            ${exercise.pilgan1}
-                                            <input type="radio" name="radio${index}" data-answer="${exercise.pilgan1}">
+                                        <label class="options" data-correct="${exam.kunci_jawaban}">
+                                            ${exam.pilgan1}
+                                            <input type="radio" name="radio${index}" data-answer="${exam.pilgan1}">
                                             <span class="checkmark"></span>
                                         </label>
-                                        <label class="options" data-correct="${exercise.kunci_jawaban}">
-                                            ${exercise.pilgan2}
-                                            <input type="radio" name="radio${index}" data-answer="${exercise.pilgan2}">
+                                        <label class="options" data-correct="${exam.kunci_jawaban}">
+                                            ${exam.pilgan2}
+                                            <input type="radio" name="radio${index}" data-answer="${exam.pilgan2}">
                                             <span class="checkmark"></span>
                                         </label>
-                                        <label class="options" data-correct="${exercise.kunci_jawaban}">
-                                            ${exercise.pilgan3}
-                                            <input type="radio" name="radio${index}" data-answer="${exercise.pilgan3}">
+                                        <label class="options" data-correct="${exam.kunci_jawaban}">
+                                            ${exam.pilgan3}
+                                            <input type="radio" name="radio${index}" data-answer="${exam.pilgan3}">
                                             <span class="checkmark"></span>
                                         </label>
-                                        <label class="options" data-correct="${exercise.kunci_jawaban}">
-                                            ${exercise.pilgan4}
-                                            <input type="radio" name="radio${index}" data-answer="${exercise.pilgan4}">
+                                        <label class="options" data-correct="${exam.kunci_jawaban}">
+                                            ${exam.pilgan4}
+                                            <input type="radio" name="radio${index}" data-answer="${exam.pilgan4}">
                                             <span class="checkmark"></span>
                                         </label>
-                                        <label class="options" data-correct="${exercise.kunci_jawaban}">
-                                            ${exercise.pilgan5}
-                                            <input type="radio" name="radio${index}" data-answer="${exercise.pilgan5}">
+                                        <label class="options" data-correct="${exam.kunci_jawaban}">
+                                            ${exam.pilgan5}
+                                            <input type="radio" name="radio${index}" data-answer="${exam.pilgan5}">
                                             <span class="checkmark"></span>
                                         </label>
                                     </div>
@@ -139,7 +139,7 @@
                                 <br />
                             `;
 
-                exerciseContainer.append(exerciseHtml);
+                examContainer.append(examHtml);
             });
 
             console.log(correctAnswers);

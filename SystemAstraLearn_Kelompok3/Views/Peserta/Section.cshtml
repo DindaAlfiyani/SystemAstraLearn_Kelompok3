@@ -92,30 +92,31 @@
 <script>
     $(document).ready(function () {
         var rootHost = "http://localhost:5114";
-        var rootWebHost = "http://localhost:7275/MengikutiPelatihan/";
-        var rootWebHost2 = "http://localhost:7275/MengerjakanExercise/"
+        var rootWebHost = "https://localhost:7275/MengikutiPelatihan/";
+        var rootWebHost2 = "https://localhost:7275/MengerjakanExercise/"
         var IdPelatihan = $("#idPelatihan").val();
         var IdSection = $("#idSection").val();
         var NamaPelatihan = $("#namaPelatihan").val();
         var NamaPengguna = $("#namaPengguna").val();;
-        var rootWebHost3 = "http://localhost:7275/MengerjakanExam/";
+        var rootWebHost3 = "https://localhost:7275/MengerjakanExam/";
         var idBerikutnya;
         var NamaModul;
         var RiwayatSection;
+        var HistorySection;
         var IdLogin = $("#idLogin").val()
         var video = "https://localhost:7275/assets/Video/";
-        var pdfDirectory = "http://localhost:7275/assets/Upload/";
+        var pdfDirectory = "https://localhost:7275/assets/Upload/";
 
         var elem = $(IdSection);
 
         // Periksa apakah elemen tersebut ada dan memiliki kelas 'bi-check-circle-fill'
-        if (elem.hasClass("bi-check-circle-fill")) {
-            // Jalankan sesuatu jika kelas ada
-            console.log("Kelas bi-check-circle-fill ditemukan");
-        } else {
-            // Jalankan sesuatu jika kelas tidak ada
-            console.log("Kelas bi-check-circle-fill tidak ditemukan");
-        }
+        /* if (elem.hasClass("bi-check-circle-fill")) {
+             // Jalankan sesuatu jika kelas ada
+             console.log("Kelas bi-check-circle-fill ditemukan");
+         } else {
+             // Jalankan sesuatu jika kelas tidak ada
+             console.log("Kelas bi-check-circle-fill tidak ditemukan");
+         }*/
 
         function loadForm() {
             $.ajax({
@@ -145,6 +146,7 @@
                 }
             });
         }
+
 
         $(document).on("click", ".update-href-btn", function () {
             var newHref = rootWebHost2 + IdPelatihan + '/' + IdSection + '/' + NamaPelatihan;
@@ -188,31 +190,11 @@
                 contentType: 'application/json',
                 success: function (response) {
                     RiwayatSection = response.data.riwayat_section;
-                    loadId(response.data.riwayat_section);
-                },
-                error: function () {
-                    console.error("Failed to load sections data.");
-                }
-            });
-        }
-
-        function loadId(riwayat) {
-            $.ajax({
-                url: rootHost + '/Section/GetAllSectionsById?id=' + IdPelatihan,
-                method: 'get',
-                contentType: 'application/json',
-                success: function (response) {
-                    if (response.status === 200) {
-                        if (response.data === null || response.data[riwayat] === undefined) {
-                            var newHref = rootWebHost3 + IdPelatihan + '/' + 2 + '/' + NamaPelatihan;
-                            window.location.href = newHref;
-                        } else {
-                            idBerikutnya = response.data[riwayat].id_section;
-                            var newHref = rootWebHost + IdPelatihan + '/' + idBerikutnya + '/' + NamaPelatihan;
-                            window.location.href = newHref;
-                        }
+                    console.log(RiwayatSection);
+                    if (RiwayatSection !== undefined && !isNaN(RiwayatSection)) {
+                        loadId(parseInt(RiwayatSection)); // Perbarui riwayat dengan nilai yang tepat
                     } else {
-                        console.error("Failed to load sections data.");
+                        console.error("Invalid riwayat section index.");
                     }
                 },
                 error: function () {
@@ -221,16 +203,62 @@
             });
         }
 
+        function loadId(riwayat) {
+            // Lakukan pengecekan apakah semua section telah selesai
+            $.ajax({
+                url: rootHost + '/Section/GetAllSectionsById?id=' + IdPelatihan + '&status=1',
+                method: 'get',
+                contentType: 'application/json',
+                success: function (response) {
+                    if (response.status === 200) {
+                        if (!response.data || !Array.isArray(response.data)) {
+                            console.error("Data section tidak valid.");
+                            return;
+                        }
+
+                        // Jika riwayat melebihi jumlah section, arahkan ke halaman exam
+                        if (riwayat >= response.data.length) {
+                            window.location.href = rootWebHost3 + IdPelatihan + '/' + IdSection + '/' + NamaPelatihan;
+                            return;
+                        }
+
+                        // Jika belum semua section selesai, lanjutkan ke section berikutnya
+                        var nextSection = response.data[riwayat];
+                        if (!nextSection) {
+                            console.error("Section berikutnya tidak ditemukan.");
+                            return;
+                        }
+                        console.log('Next Section' + nextSection.id_section);
+                        //return;
+                        idBerikutnya = nextSection.id_section;
+                        var newHref = rootWebHost + IdPelatihan + '/' + idBerikutnya + '/' + NamaPelatihan;
+                        window.location.href = newHref;
+                    } else {
+                        console.error("Gagal memuat data section.");
+                    }
+                },
+                error: function () {
+                    console.error("Gagal memuat data section.");
+                }
+            });
+        }
+
+
 
         $(document).on("click", ".lanjut-btn", function () {
             var namaPelatihan = $("#namaSection").text(); // Ambil teks dari elemen dengan ID namaSection
+
             var data = {
                 id_mengikuti_pelatihan: 0,
                 id_pengguna: IdLogin,
                 id_pelatihan: IdPelatihan,
                 riwayat_section: 0,
+                tanggal_mulai: new Date(),
+                tanggal_selesai: new Date(),
                 status: 1
             };
+
+            console.log(data);
 
             $.ajax({
                 url: rootHost + "/MengikutiPelatihan/UpdateMengikutiPelatihan",

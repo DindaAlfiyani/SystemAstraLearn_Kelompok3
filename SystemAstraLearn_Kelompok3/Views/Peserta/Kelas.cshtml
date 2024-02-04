@@ -31,6 +31,9 @@
 <section1>
     <div class="container">
         <div class="d-flex justify-content-start py-4">
+            <div class="pagetitle" style="margin-left: 50px;">
+                <p>Teknik Informasi</p>
+            </div>
         </div><!-- End Logo -->
     </div>
 
@@ -200,8 +203,17 @@
         var rootHost = "http://localhost:5114";
         var rootWebHost = "https://localhost:7275/SebelumMengikutiPelatihan/";
         var pelatihanId;
+        var TanggalMulai;
         var IdLogin = $("#idLogin").val();
-        var video;
+        var gambarPath = "https://localhost:7275/assets/Thumbnail/";
+
+        TanggalMulai = new Date().toISOString();
+
+        // Inisialisasi local storage jika belum ada data
+        if (!localStorage.getItem('dataMengikutiPelatihan')) {
+            localStorage.setItem('dataMengikutiPelatihan', JSON.stringify([]));
+        }
+
         function fetchData() {
             $.ajax({
                 url: "http://localhost:5114/Pelatihan/GetAllPelatihan",
@@ -219,94 +231,135 @@
                 }
             });
         }
-                        function populateCards(data) {
-                        // Clear existing cards
-                        $(".swiper-wrapper.content").empty();
 
-                        // Iterate over the data and create cards
-                        data.forEach(function (pelatihan, index) {
-                
+        function populateCards(data) {
+            // Clear existing cards
+            $(".swiper-wrapper.content").empty();
 
-                            var cardHtml = `
-                                <div class="swiper-slide card1" id="card1_${index + 1}">
-                                    <div class="box2"></div>
-                                    <div class="card1-content">
-                                        <div class="image">
-                                            <img src="${video + data.video_pembelajaran}" alt="Video Thumbnail">
-                                        </div>
-                                        <div class="name-profession">
-                                            <span class="name">${pelatihan.nama_pelatihan}</span>
-                                            <span class="profession">${pelatihan.nama_klasifikasi}</span>
-                                        </div>
-                                        <div class="">
-                                            <p>${pelatihan.deskripsi_pelatihan}</p>
-                                        </div>
-                                        <div class="button b2">
-                                             <button class="btn btn-primary btn-ikuti" style="background-color: #066CBB">Ikuti Pelatihan</i></button>
-                                        </div>
-                                    </div>
-                                </div>`;
+            // Iterate over the data and create cards
+            data.forEach(function (pelatihan, index) {
+                var cardHtml = `
+                    <div class="swiper-slide card1" id="card1_${index + 1}" data-id="${pelatihan.id_pelatihan}">
+                        <div class="box2"></div>
+                        <div class="card1-content">
+                            <div class="image">
+                                <img src="${gambarPath + pelatihan.gambar}" alt="Video Thumbnail">
+                            </div>
+                            <div class="name-profession">
+                                <span class="name">${pelatihan.nama_pelatihan}</span>
+                                <span class="profession">${pelatihan.nama_klasifikasi}</span>
+                            </div>
+                            <div class="">
+                                <p>${pelatihan.deskripsi_pelatihan}</p>
+                            </div>
+                            <div class="button b2">
+                                <button class="btn btn-primary btn-ikuti" style="background-color: #066CBB">Ikuti Pelatihan</i></button>
+                            </div>
+                        </div>
+                    </div>`;
 
-                            // Append the card to the swiper
-                            $(".swiper-wrapper.content").append(cardHtml);
-                        });
+                // Append the card to the swiper
+                $(".swiper-wrapper.content").append(cardHtml);
+            });
 
-                        // Initialize the swiper after populating cards
-                        var swiper1 = new Swiper("#swiper1", {
-                            slidesPerView: 4,
-                            spaceBetween: 10,
-                            grabCursor: true,
-                            slidesPerGroup: 1,
-                            loop: false,
-                            loopFillGroupWithBlank: true,
-                            pagination: {
-                                el: ".swiper-pagination1",
-                                clickable: true,
-                            },
-                            navigation: {
-                                nextEl: ".swiper-button-next1",
-                                prevEl: ".swiper-button-prev1",
-                            },
-                        });
+            // Initialize the swiper after populating cards
+            var swiper1 = new Swiper("#swiper1", {
+                slidesPerView: 4,
+                spaceBetween: 10,
+                grabCursor: true,
+                slidesPerGroup: 1,
+                loop: false,
+                loopFillGroupWithBlank: true,
+                pagination: {
+                    el: ".swiper-pagination1",
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: ".swiper-button-next1",
+                    prevEl: ".swiper-button-prev1",
+                },
+            });
 
-                        // Add click event listeners to individual slides in swiper1
-                        document.querySelectorAll('#swiper1 .swiper-slide.card1').forEach(function (slide) {
-                            slide.addEventListener('click', function () {
-                                var index = slide.getAttribute('id').split('_')[1];
-                                swiper1.slideTo(index);
-                            });
-                        });
-                    }
-
-                    $('#swiper1').on('click', 'button.btn-ikuti', function () {
-                        pelatihanId = $(this).closest('tr').data("id");
-                        var namaPelatihan = $(this).closest('tr').find('td:eq(1)').text();
-                        var data = {
-                            id_pengguna: IdLogin,
-                            id_pelatihan: pelatihanId,
-                            riwayat_section: 0
-                        }
-
-                        $.ajax({
-                            url: rootHost + "/MengikutiPelatihan/InsertMengikutiPelatihan",
-                            type: "post",
-                            data: JSON.stringify(data),
-                            dataType: "json",
-                            contentType: "application/json",
-                            success: function (result) {
-                                var newHref = rootWebHost + pelatihanId + '/0/' + namaPelatihan;
-                                window.location.href = newHref;
-                            },
-                            error: function () {
-                                console.error("Error fetching data.");
-                            }
-                        });
-                    });
-
-                    // Fetch data when the page is loaded
-                    fetchData();
+            // Add click event listeners to individual slides in swiper1
+            document.querySelectorAll('#swiper1 .swiper-slide.card1').forEach(function (slide) {
+                slide.addEventListener('click', function () {
+                    var index = slide.getAttribute('id').split('_')[1];
+                    swiper1.slideTo(index);
                 });
-            </script>
+            });
+        }
+
+        $('.swiper-wrapper.content').on('click', 'button.btn-ikuti', function (event) {
+            event.stopPropagation(); // Menghentikan propagasi klik ke atas, sehingga tidak memicu klik pada swiper slide
+            var pelatihanId = $(this).closest('.swiper-slide').data("id");
+
+            // Pemeriksaan apakah pengguna sudah mengikuti pelatihan
+            if (penggunaSudahMengikuti(IdLogin, pelatihanId)) {
+                var namaPelatihan = $(this).closest('.swiper-slide').find('.nama_pelatihan').text();
+                var newHref = rootWebHost + pelatihanId + '/0/' + namaPelatihan;
+                window.location.href = newHref;
+                return;
+            }
+
+            var namaPelatihan = $(this).closest('.swiper-slide').find('.nama_pelatihan').text();
+            var data = {
+                id_pengguna: IdLogin,
+                id_pelatihan: pelatihanId,
+                tanggal_mulai: TanggalMulai,
+                riwayat_section: 0
+            };
+
+            // Setelah sukses menyisipkan data pelatihan yang diikuti
+            var dataMengikutiPelatihan = localStorage.getItem('dataMengikutiPelatihan');
+            var mengikutiPelatihanArray = dataMengikutiPelatihan ? JSON.parse(dataMengikutiPelatihan) : [];
+
+            mengikutiPelatihanArray.push(data);
+
+            // Simpan kembali ke local storage
+            localStorage.setItem('dataMengikutiPelatihan', JSON.stringify(mengikutiPelatihanArray));
+
+            $.ajax({
+                url: rootHost + "/MengikutiPelatihan/InsertMengikutiPelatihan",
+                type: "post",
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: "application/json",
+                success: function (result) {
+                    var newHref = rootWebHost + pelatihanId + '/0/' + namaPelatihan;
+                    window.location.href = newHref;
+                },
+                error: function () {
+                    console.error("Error fetching data.");
+                }
+            });
+        });
+
+        // Fungsi untuk memeriksa apakah pengguna sudah mengikuti pelatihan
+        function penggunaSudahMengikuti(id_pengguna, id_pelatihan) {
+            // Mendapatkan data dari local storage (misalnya, dalam bentuk JSON string)
+            var dataMengikutiPelatihan = localStorage.getItem('dataMengikutiPelatihan');
+
+            // Jika data tidak ada, berarti pengguna belum mengikuti pelatihan apa pun
+            if (!dataMengikutiPelatihan) {
+                return false;
+            }
+
+            // Mengonversi JSON string menjadi objek JavaScript
+            var mengikutiPelatihanArray = JSON.parse(dataMengikutiPelatihan);
+
+            // Memeriksa apakah pengguna sudah mengikuti pelatihan dengan id_pelatihan tertentu
+            var penggunaSudahMengikutiPelatihan = mengikutiPelatihanArray.some(function (item) {
+                return item.id_pengguna === id_pengguna && item.id_pelatihan === id_pelatihan;
+            });
+
+            return penggunaSudahMengikutiPelatihan;
+        }
+
+        // Fetch data when the page is loaded
+        fetchData();
+    });
+    
+</script>
 
 
 

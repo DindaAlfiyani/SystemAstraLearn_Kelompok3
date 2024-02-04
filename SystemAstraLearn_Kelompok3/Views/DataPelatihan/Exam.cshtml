@@ -11,7 +11,7 @@
 
     
         <div class="table-responsive">
-            <button class="btn btn-sm btn-primary mb-3" data-toggle="modal" data-target="#tambah_exercise" style="background-color: #066CBB; color:seashell; border-radius: 7px; font-size: 20px;">
+            <button class="btn btn-sm btn-primary mb-3" data-toggle="modal" data-target="#tambah_exam" style="background-color: #066CBB; color:seashell; border-radius: 7px; font-size: 20px;">
                 <i class="fas fa-plus fa-sm"></i> Tambah Exam
             </button>
             <button class="btn btn-sm btn-warning mb-3" data-toggle="modal" data-target="#ubah_nilai_minimum" style="background-color: #066CBB; color:seashell; border-radius: 7px; font-size: 20px;">
@@ -28,7 +28,7 @@
                 </thead>
             </table>
         </div>
-    <div class="modal fade" id="tambah_exercise" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="tambah_exam" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -91,8 +91,8 @@
         </div>
     </div>
 
-    <!-- Edit Exercise Modal -->
-    <div class="modal fade" id="edit_exercise" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <!-- Edit exam Modal -->
+    <div class="modal fade" id="edit_exam" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -149,7 +149,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="info_exercise" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="info_exam" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -239,7 +239,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var rootHost = "http://localhost:5114";
-        var exerciseId;
+        var examId;
         var IdPelatihan = $("#idPelatihan").val();
 
         new DataTable('#dataTable', {
@@ -267,8 +267,8 @@
                     targets: 3,
                     render: function (data, type, row, index) {
                         const deleteButton = '<button class="btn btn-sm btn-danger delete-button" style="background-color:#BB0000; border-radius: 5px;"><i class="bi bi-trash"></i></button>';
-                        const editButton = '<button class="btn btn-primary btn-sm edit-button" data-toggle="modal" data-target="#edit_exercise" data-id="' + row.id_pelatihan + '" style="background-color: #066CBB border-radius: 5px;"><i class="bi bi-exclamation-triangle"></i></button>';
-                        const editButton2 = '<button class="btn btn-primary btn-sm edit-button2" data-toggle="modal" data-target="#detail_exercise" data-id="' + row.id_pelatihan + '"><i class="bi bi-info-circle"></i></button>';
+                        const editButton = '<button class="btn btn-primary btn-sm edit-button" data-toggle="modal" data-target="#edit_exam" data-id="' + row.id_pelatihan + '" style="background-color: #066CBB border-radius: 5px;"><i class="bi bi-exclamation-triangle"></i></button>';
+                        const editButton2 = '<button class="btn btn-primary btn-sm edit-button2" data-toggle="modal" data-target="#detail_exam" data-id="' + row.id_pelatihan + '"><i class="bi bi-info-circle"></i></button>';
                         return editButton + " " + deleteButton + " " + editButton2;
                     }
                 }
@@ -303,7 +303,7 @@
 
         loadNilai();
 
-        function tambahExercise() {
+        function tambahexam() {
             var soal = $("#Soal").val();
             var pilgan1 = $("#Pilgan1").val();
             var pilgan2 = $("#Pilgan2").val();
@@ -405,16 +405,16 @@
 
         $("#myForm").submit(function (e) {
             e.preventDefault();
-            tambahExercise();
+            tambahexam();
         });
 
 
         $(document).on("click", ".delete-button", function () {
-            exerciseId = $(this).closest('tr').data("id");
+            examId = $(this).closest('tr').data("id");
 
             Swal.fire({
-                title: "Hapus Exercise?",
-                text: "Apakah anda ingin menghapus exercise ini?",
+                title: "Hapus exam?",
+                text: "Apakah anda ingin menghapus exam ini?",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
@@ -423,14 +423,14 @@
                 cancelButtonText: "Tidak"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    hapusExercise();
+                    hapusexam();
                 }
             });
         });
 
-        function hapusExercise() {
+        function hapusexam() {
             $.ajax({
-                url: rootHost + '/Exam/DeleteExam?id=' + exerciseId,
+                url: rootHost + '/Exam/DeleteExam?id=' + examId,
                 type: "POST",
                 success: function (data) {
                     notifikasiHapusSukses();
@@ -442,10 +442,10 @@
         }
 
         $('#dataTable').on('click', 'button.edit-button', function () {
-            exerciseId = $(this).closest('tr').data("id");
+            examId = $(this).closest('tr').data("id");
 
             $.ajax({
-                url: rootHost + '/Exam/GetExam?id=' + exerciseId,
+                url: rootHost + '/Exam/GetExam?id=' + examId,
                 type: 'GET',
                 success: function (response) {
                     if (response && response.data) {
@@ -477,7 +477,7 @@
                         }
 
                         // Show the edit modal
-                        $('#edit_exercise').modal('show');
+                        $('#edit_exam').modal('show');
                     } else {
                         console.error("Invalid response format:", response);
                         Swal.fire('Error!', 'Terjadi kesalahan dalam format respons.', 'error');
@@ -490,10 +490,10 @@
         });
 
         $('#dataTable').on('click', 'button.edit-button2', function () {
-            exerciseId = $(this).closest('tr').data("id");
+            examId = $(this).closest('tr').data("id");
 
             $.ajax({
-                url: rootHost + '/Exam/GetExam?id=' + exerciseId,
+                url: rootHost + '/Exam/GetExam?id=' + examId,
                 type: 'GET',
                 success: function (response) {
                     if (response && response.data) {
@@ -525,7 +525,7 @@
                         }
 
                         // Show the edit modal
-                        $('#info_exercise').modal('show');
+                        $('#info_exam').modal('show');
                     } else {
                         console.error("Invalid response format:", response);
                         Swal.fire('Error!', 'Terjadi kesalahan dalam format respons.', 'error');
@@ -537,7 +537,7 @@
             });
         });
 
-        function ubahExercise() {
+        function ubahexam() {
             var soal = $("#EditSoal").val();
             var pilgan1 = $("#EditPilgan1").val();
             var pilgan2 = $("#EditPilgan2").val();
@@ -596,7 +596,7 @@
             }
 
             var data = {
-                id_exam: exerciseId,
+                id_exam: examId,
                 id_pelatihan: IdPelatihan,
                 soal: soal,
                 pilgan1: pilgan1,
@@ -624,7 +624,7 @@
 
         $("#editForm").submit(function (e) {
             e.preventDefault();
-            ubahExercise();
+            ubahexam();
         });
 
         function notifikasiTambahSukses() {
@@ -663,12 +663,12 @@
             });
         }
 
-        $('#edit_exercise .close').on('click', function () {
-            $('#edit_exercise').modal('hide');
+        $('#edit_exam .close').on('click', function () {
+            $('#edit_exam').modal('hide');
         });
 
-        $('#info_exercise .close').on('click', function () {
-            $('#info_exercise').modal('hide');
+        $('#info_exam .close').on('click', function () {
+            $('#info_exam').modal('hide');
         });
 
         function ubahNilaiMinimum() {

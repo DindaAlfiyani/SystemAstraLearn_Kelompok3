@@ -226,7 +226,9 @@
             <section1>
                 <div class="container">
                     <div class="d-flex justify-content-start py-4">
-                        
+                        <div class="pagetitle" style="margin-left: 50px;" id="klasifikasi">
+                            <p>Teknik Informasi</p>
+                        </div>
                     </div><!-- End Logo -->
                 </div>
 
@@ -292,58 +294,103 @@
             </script>
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
+                    var rootHost = "http://localhost:5114";
+                    var gambarPath = "https://localhost:7275/assets/Thumbnail/";
+
                     function fetchData() {
                         $.ajax({
-                            url: "http://localhost:5114/Pelatihan/GetAllPelatihan",
+                            url: "http://localhost:5114/Klasifikasi/GetAllKlasifikasiPelatihan", // Ganti URL sesuai dengan endpoint yang benar untuk mendapatkan semua klasifikasi
                             type: "GET",
                             dataType: "json",
                             success: function (result) {
                                 if (result.status === 200) {
-                                    populateCards(result.data);
+                                    // After fetching classifications, fetch respective trainings for each classification
+                                    result.data.forEach(function (klasifikasi) {
+                                        fetchPelatihanByKlasifikasi(klasifikasi);
+                                    });
                                 } else {
-                                    console.error("Failed to fetch data.");
+                                    console.error("Failed to fetch classifications.");
                                 }
                             },
                             error: function () {
-                                console.error("Error fetching data.");
+                                console.error("Error fetching classifications.");
                             }
                         });
                     }
 
-                    function populateCards(data) {
-                        // Clear existing cards
-                        $(".swiper-wrapper.content").empty();
+                    function fetchPelatihanByKlasifikasi(klasifikasi) {
+                        $.ajax({
+                            url: `${rootHost}/Pelatihan/GetPelatihanByKlasifikasi?klasifikasi=${klasifikasi}`, // Ganti URL sesuai dengan endpoint yang benar untuk mendapatkan pelatihan berdasarkan klasifikasi
+                            type: "GET",
+                            dataType: "json",
+                            success: function (result) {
+                                if (result.status === 200) {
+                                    populateCards(result.data, klasifikasi);
+                                } else {
+                                    console.error(`Failed to fetch trainings for classification: ${klasifikasi}`);
+                                }
+                            },
+                            error: function () {
+                                console.error(`Error fetching trainings for classification: ${klasifikasi}`);
+                            }
+                        });
+                    }
+
+                    function populateCards(data, klasifikasi) {
+                        // Generate a unique swiper container ID for each classification
+                        var swiperContainerId = `swiper_${klasifikasi}`;
+
+                        // Create a section for each classification
+                        var sectionHtml = `
+                                <section class="section1" id="section_${klasifikasi}">
+                                    <div class="container">
+                                        <div class="d-flex justify-content-start py-4">
+                                            <div class="pagetitle" style="margin-left: 50px;" id="klasifikasi">
+                                                <p>${pelatihan.nama_klasifikasi}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="swiper mySwiper Swiper1 container" id="${swiperContainerId}">
+                                        <div class="swiper-wrapper content">
+                                            <!-- Cards will be dynamically added here -->
+                                        </div>
+
+                                        <div class="swiper-pagination swiper-pagination1"></div>
+                                    </div>
+                                    <div class="swiper-button-next swiper-button-next1"></div>
+                                    <div class="swiper-button-prev swiper-button-prev1"></div>
+                                </section>
+                            `;
+
+                        // Append the section to the body
+                        $("body").append(sectionHtml);
 
                         // Iterate over the data and create cards
                         data.forEach(function (pelatihan, index) {
-                            var videoThumbnailLink = "https://localhost:7275/assets/Video/";
-
                             var cardHtml = `
-                                        <div class="swiper-slide card1" id="card1_${index + 1}">
-                                            <div class="box2"></div>
-                                            <div class="card1-content">
-                                                <div class="image">
-                                                    <img src="${videoThumbnailLink + data.video_pembelajaran}" alt="Video Thumbnail">
-                                                </div>
-                                                <div class="name-profession">
-                                                    <span class="name">${pelatihan.nama_pelatihan}</span>
-                                                    <span class="profession">${pelatihan.nama_klasifikasi}</span>
-                                                </div>
-                                                <div class="">
-                                                    <p>${pelatihan.deskripsi_pelatihan}</p>
-                                                </div>
-                                                <div class="button b2">
-                                                    
-                                                </div>
+                                    <div class="swiper-slide card1" id="card1_${klasifikasi}_${index + 1}" data-id="${pelatihan.id_pelatihan}">
+                                        <div class="box2"></div>
+                                        <div class="card1-content">
+                                            <div class="image">
+                                                <img src="${gambarPath + pelatihan.gambar}" alt="Video Thumbnail">
                                             </div>
-                                        </div>`;
+                                            <div class="name-profession">
+                                                <span class="name">${pelatihan.nama_pelatihan}</span>
+                                                <span class="profession">${pelatihan.nama_klasifikasi}</span>
+                                            </div>
+                                            <div class="">
+                                                <p>${pelatihan.deskripsi_pelatihan}</p>
+                                            </div>
+                                        </div>
+                                    </div>`;
 
-                            // Append the card to the swiper
-                            $(".swiper-wrapper.content").append(cardHtml);
+                            // Append the card to the swiper inside the corresponding section
+                            $(`#${swiperContainerId} .swiper-wrapper.content`).append(cardHtml);
                         });
 
                         // Initialize the swiper after populating cards
-                        var swiper1 = new Swiper("#swiper1", {
+                        var swiper = new Swiper(`#${swiperContainerId}`, {
                             slidesPerView: 4,
                             spaceBetween: 10,
                             grabCursor: true,
@@ -351,33 +398,29 @@
                             loop: false,
                             loopFillGroupWithBlank: true,
                             pagination: {
-                                el: ".swiper-pagination1",
+                                el: `#${swiperContainerId} .swiper-pagination1`,
                                 clickable: true,
                             },
                             navigation: {
-                                nextEl: ".swiper-button-next1",
-                                prevEl: ".swiper-button-prev1",
+                                nextEl: `#${swiperContainerId} .swiper-button-next1`,
+                                prevEl: `#${swiperContainerId} .swiper-button-prev1`,
                             },
                         });
 
-                        // Add click event listeners to individual slides in swiper1
-                        document.querySelectorAll('#swiper1 .swiper-slide.card1').forEach(function (slide) {
+                        // Add click event listeners to individual slides in the swiper
+                        document.querySelectorAll(`#${swiperContainerId} .swiper-slide.card1`).forEach(function (slide) {
                             slide.addEventListener('click', function () {
-                                var index = slide.getAttribute('id').split('_')[1];
-                                swiper1.slideTo(index);
+                                var index = slide.getAttribute('id').split('_')[2];
+                                swiper.slideTo(index);
                             });
                         });
-                    }
-
-                    // Function to get YouTube video thumbnail link
-                    function getYouTubeThumbnailLink(videoId) {
-                        return `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
                     }
 
                     // Fetch data when the page is loaded
                     fetchData();
                 });
             </script>
+
 
 
 
